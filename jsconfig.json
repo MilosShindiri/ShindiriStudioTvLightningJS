@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "moduleResolution": "node",
+    "checkJs": false,
+    "noImplicitAny": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@lightningjs/*": ["node_modules/@lightningjs/*"]
+    },
+    "typeRoots": ["node_modules/@types", "node_modules/@lightningjs"]
+  },
+  "include": ["src", "src/constants"],
+  "exclude": ["node_modules"]
+}
