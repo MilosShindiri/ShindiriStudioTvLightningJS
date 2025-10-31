@@ -18,6 +18,9 @@
     "path": "./static",
     "log": false,
     "showVersion": false,
-    "inspector": true
+    "inspector": true,
+    "image": {
+      "quality": 100
+    }
   }
 }

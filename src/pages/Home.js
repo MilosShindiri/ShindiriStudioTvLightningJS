@@ -1,75 +1,112 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import HorizontalContainer from "../components/HorizontalContainer/HorizontalContainer";
-import VerticalContainer from "../components/VerticalContainer/VerticalContainer";
-import { movieService } from "../services/movieService";
-import MovieCard from "../components/MovieCard";
+import Content from "../components/Home/Content";
+import TopChannels from "../components/Home/TopChannels";
+import Button from "../components/Home/Button";
 
 export default class Home extends Lightning.Component {
   static _template() {
     return {
       w: 1920,
       h: 1080,
+      rect: true,
       Background: {
-        rect: true,
         w: 1920,
         h: 1080,
-        src: Utils.asset("images/background.jpg"),
+        src: Utils.asset("images/backgroundImage.png"),
+        shader: null,
       },
-      Sections: {
+      Content: {
+        x: 64,
         y: 125,
-        Vertical: { type: VerticalContainer, x: 1415 },
-        Horizontal: {
-          x: 64,
-          children: {
-            MoviesRow: { type: HorizontalContainer },
-            SeriesRow: { type: HorizontalContainer, y: 548 },
-          },
-        },
+        w: 1241,
+        h: 837,
+        type: Content,
+      },
+      TopChannels: {
+        x: 1415,
+        y: 122,
+        type: TopChannels,
+      },
+      Button: {
+        x: 64,
+        y: 971,
+        type: Button,
       },
     };
   }
 
-  async _init() {
-    const topChannels = [
-      {
-        title: "HBO",
-        image: Utils.asset("../../static/images/channels/hbo.png"),
+  get Content() {
+    return this.tag("Content");
+  }
+
+  get TopChannels() {
+    return this.tag("TopChannels");
+  }
+
+  get Button() {
+    return this.tag("Button");
+  }
+
+  _init() {
+    this._setState("ContentState");
+  }
+
+  static _states() {
+    return [
+      class ButtonState extends this {
+        $enter() {
+          this.Button.setSmooth("alpha", 1);
+          this.Content.setSmooth("alpha", 0.6);
+          this.TopChannels.setSmooth("alpha", 0.6);
+        }
+
+        _getFocused() {
+          return this.Button;
+        }
+
+        _handleUp() {
+          this._setState("ContentState");
+          return true;
+        }
       },
-      {
-        title: "Netflix",
-        image: Utils.asset("../../static/images/channels/netflix.png"),
+      class ContentState extends this {
+        $enter() {
+          this.Content.setSmooth("alpha", 1);
+          this.TopChannels.setSmooth("alpha", 0.6);
+          this.Button.setSmooth("alpha", 0.6);
+        }
+
+        _getFocused() {
+          return this.Content;
+        }
+
+        _handleRight() {
+          this._setState("TopChannelsState");
+          return true;
+        }
+
+        _handleDown() {
+          this._setState("ButtonState");
+          return true;
+        }
       },
-      {
-        title: "Disney",
-        image: Utils.asset("../../static/images/channels/disney.png"),
-      },
-      {
-        title: "Amazon",
-        image: Utils.asset("../../static/images/channels/prime.png"),
-      },
-      {
-        title: "Hulu",
-        image: Utils.asset("../../static/images/channels/hulu.png"),
+
+      class TopChannelsState extends this {
+        $enter() {
+          this.Content.setSmooth("alpha", 0.6);
+          this.Button.setSmooth("alpha", 0.6);
+          this.TopChannels.setSmooth("alpha", 1);
+        }
+
+        _getFocused() {
+          return this.TopChannels;
+        }
+
+        _handleLeft() {
+          this._setState("ContentState");
+          return true;
+        }
       },
     ];
-    this.tag("Vertical").items = topChannels;
-
-    const movies = await movieService.fetchPopularMovies({ page: 1 });
-    const series = await movieService.fetchPopularMovies({ page: 2 });
-
-    const movieItems = movies
-      .slice(0, 5)
-      .map((m) => ({ type: MovieCard, movie: m }));
-    const seriesItems = series
-      .slice(0, 5)
-      .map((m) => ({ type: MovieCard, movie: m }));
-
-    this.tag("MoviesRow").props = { items: movieItems, railTitle: "Movies" };
-    this.tag("SeriesRow").props = { items: seriesItems, railTitle: "Series" };
-
-    this._focusedRow = "MoviesRow";
-  }
-  _getFocused() {
-    return this.tag(`Sections.Horizontal.${this._focusedRow}`);
   }
 }

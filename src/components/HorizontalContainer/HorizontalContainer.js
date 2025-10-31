@@ -73,22 +73,25 @@ export default class HorizontalContainer extends Lightning.Component {
     const { cardType, targetIndex } = rest;
 
     if (railTitle && railTitle !== "") {
-      const { h } = rest;
+      const { x, h, railFontFace, railFontSize, railLetterSpacing } = rest;
+      console.log(railFontSize);
       this.Items.patch({
         y: 0,
       });
       this.patch({
         h: h + 95,
         Title: {
-          x: 0,
+          // x: 0,
+          x: x,
           y: 0,
           // h: 55,
           text: {
             text: railTitle,
-            fontFace: "Montserrat-Medium",
-            fontSize: 40,
+            fontFace: railFontFace || "Montserrat-Medium",
+            fontSize: railFontSize || 40,
             textColor: Colors("#fff").get(),
-            lineHeight: 39,
+            lineHeight: 40,
+            letterSpacing: railLetterSpacing,
             textTransform: "uppercase",
           },
         },
@@ -169,14 +172,14 @@ export default class HorizontalContainer extends Lightning.Component {
     return this.Items?.children?.[this._focusedIndex];
   }
 
-  _handleDown() {
-    return false;
-  }
+  // _handleDown() {
+  //   return false;
+  // }
 
-  _handleUp() {
-    console.log("handle up");
-    return false;
-  }
+  // _handleUp() {
+  //   console.log("handle up");
+  //   return false;
+  // }
 
   _handleHover() {
     let verticalState;
