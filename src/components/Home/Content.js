@@ -1,4 +1,4 @@
-import { Lightning } from "@lightningjs/sdk";
+import { Lightning, Router } from "@lightningjs/sdk";
 import HorizontalContainer from "../HorizontalContainer/HorizontalContainer";
 import MovieCard from "../Home/MovieCard";
 import { movieService } from "../../services/movieService";
@@ -21,7 +21,8 @@ export default class Content extends Lightning.Component {
       railFontFace: "Ema",
       railFontSize: 24,
       railLetterSpacing: 2,
-      x: 0,
+      x: 20,
+      disableScroll: true,
     };
 
     this.tag("SeriesRow").props = {
@@ -31,6 +32,7 @@ export default class Content extends Lightning.Component {
       railFontSize: 24,
       railLetterSpacing: 2,
       x: 0,
+      disableScroll: true,
     };
     this._setState("MoviesState");
   }
@@ -53,6 +55,11 @@ export default class Content extends Lightning.Component {
 
         _getFocused() {
           return this.MoviesRow;
+        }
+
+        _handleUp() {
+          // Router.focusWidget("Menu");
+          return false;
         }
 
         _handleDown() {

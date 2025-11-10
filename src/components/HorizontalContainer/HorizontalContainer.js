@@ -1,12 +1,13 @@
+// HorizontalContainer.js
 import Lightning from "@lightningjs/sdk/src/Lightning";
 import { clamp } from "../../utils/index";
 import { Colors } from "@lightningjs/sdk";
-
 export default class HorizontalContainer extends Lightning.Component {
   _props = {
     items: [],
     paddingLeft: 0,
     disableScroll: false,
+    x: 0,
   };
   _focusedIndex = -1;
   _scrollPosition = 0;
@@ -17,7 +18,6 @@ export default class HorizontalContainer extends Lightning.Component {
       Title: {},
       Items: {
         y: 0,
-        clip: true,
         flex: {
           direction: "row",
         },
@@ -66,32 +66,36 @@ export default class HorizontalContainer extends Lightning.Component {
   }
 
   set props(props) {
-    const { items, railTitle, ...rest } = props;
+    const {
+      items,
+      railTitle,
+      titleFontSize,
+      titleFontFace,
+      titleColor,
+      ...rest
+    } = props;
 
     this._props = { ...this._props, ...rest };
 
     const { cardType, targetIndex } = rest;
 
     if (railTitle && railTitle !== "") {
-      const { x, h, railFontFace, railFontSize, railLetterSpacing } = rest;
-      console.log(railFontSize);
+      const { h } = rest;
       this.Items.patch({
         y: 0,
       });
       this.patch({
         h: h + 95,
         Title: {
-          // x: 0,
-          x: x,
+          x: 0,
           y: 0,
-          // h: 55,
+          h: 55,
           text: {
             text: railTitle,
-            fontFace: railFontFace || "Montserrat-Medium",
-            fontSize: railFontSize || 40,
-            textColor: Colors("#fff").get(),
-            lineHeight: 40,
-            letterSpacing: railLetterSpacing,
+            fontFace: titleFontFace || "Montserrat-Bold",
+            fontSize: titleFontSize || 32,
+            textColor: titleColor || Colors("#fff").get(),
+            lineHeight: 39,
             textTransform: "uppercase",
           },
         },
@@ -172,14 +176,13 @@ export default class HorizontalContainer extends Lightning.Component {
     return this.Items?.children?.[this._focusedIndex];
   }
 
-  // _handleDown() {
-  //   return false;
-  // }
+  _handleDown() {
+    return false;
+  }
 
-  // _handleUp() {
-  //   console.log("handle up");
-  //   return false;
-  // }
+  _handleUp() {
+    return false;
+  }
 
   _handleHover() {
     let verticalState;
@@ -220,19 +223,18 @@ export default class HorizontalContainer extends Lightning.Component {
   }
 
   _handleRight() {
-    //this.Items.children[this._focusedIndex]._unfocus();
+    // this.Items.children[this._focusedIndex]._unfocus();
     const { items } = this._props;
     if (this._focusedIndex < items.length - 1) {
       this.Items.children[this._focusedIndex]._unfocus();
       this._focusedIndex += 1;
-      // this._reCalibrateScroll();
-      this.fireAncestors(
-        "$horizontalContainerIndexChange",
-        this._focusedIndex,
-        this._scrollPosition
-      );
-
-      console.log("right clicked");
+      this._reCalibrateScroll();
+      // this.fireAncestors(
+      //   '$horizontalContainerIndexChange',
+      //   this._focusedIndex,
+      //   this._scrollPosition,
+      // )
+      this.signal("horizontalContainerIndexChange", this._focusedIndex);
     } else {
       return false;
     }
@@ -244,12 +246,13 @@ export default class HorizontalContainer extends Lightning.Component {
     if (this._focusedIndex > 0) {
       this.Items.children[this._focusedIndex]?._unfocus();
       this._focusedIndex -= 1;
-      // this._reCalibrateScroll();
-      this.fireAncestors(
-        "$horizontalContainerIndexChange",
-        this._focusedIndex,
-        this._scrollPosition
-      );
+      this._reCalibrateScroll();
+      // this.fireAncestors(
+      //   '$horizontalContainerIndexChange',
+      //   this._focusedIndex,
+      //   this._scrollPosition,
+      // )
+      this.signal("horizontalContainerIndexChange", this._focusedIndex);
     } else {
       return false;
     }
@@ -257,7 +260,6 @@ export default class HorizontalContainer extends Lightning.Component {
   }
 
   _handleEnter() {
-    console.log("handled enter");
     const focusedItem = this.Items.children[this._focusedIndex];
     if (focusedItem) {
       focusedItem.signal("select");

@@ -1,4 +1,4 @@
-import { Lightning, Utils } from "@lightningjs/sdk";
+import { Lightning, Utils, Router } from "@lightningjs/sdk";
 import Content from "../components/Home/Content";
 import TopChannels from "../components/Home/TopChannels";
 import Button from "../components/Home/Button";
@@ -49,6 +49,7 @@ export default class Home extends Lightning.Component {
 
   _init() {
     this._setState("ContentState");
+    Router.focusWidget("Menu");
   }
 
   static _states() {
@@ -76,10 +77,18 @@ export default class Home extends Lightning.Component {
           this.Button.setSmooth("alpha", 0.6);
         }
 
+        // _handleUp() {
+        //   Router.focusWidget("Menu");
+        //   return true;
+        // }
+
         _getFocused() {
           return this.Content;
         }
-
+        _handleUp() {
+          Router.focusWidget("Menu");
+          return true;
+        }
         _handleRight() {
           this._setState("TopChannelsState");
           return true;
