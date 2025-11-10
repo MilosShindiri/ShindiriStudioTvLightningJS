@@ -21,7 +21,7 @@ export default class Content extends Lightning.Component {
       railFontFace: "Ema",
       railFontSize: 24,
       railLetterSpacing: 2,
-      x: 20,
+      x: 0,
       disableScroll: true,
     };
 

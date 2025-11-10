@@ -10,14 +10,6 @@ export default class App extends Router.App {
     return {
       ...super._template(),
 
-      // Background: {
-      //   w: 1920,
-      //   h: 1080,
-      //   rect: true,
-      //   color: colors.background,
-      //   zIndex: -1,
-      // },
-
       Pages: {
         w: 1920,
         h: 1080,
