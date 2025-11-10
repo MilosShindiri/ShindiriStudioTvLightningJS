@@ -1,28 +1,40 @@
-import { Router, Utils } from "@lightningjs/sdk";
-import router from "./router.js";
+import { Router, Utils, Lightning } from "@lightningjs/sdk";
+import setupRouter from "./router.js";
 import colors from "./styles/colors.js";
+import LoadingScreenComponent from "./components/LoadingScreen/LoadingScreenComponent.js";
 
 export default class App extends Router.App {
   static _template() {
     return {
-      Background: { w: 1920, h: 1080, rect: true, color: colors.background },
-      Pages: {},
-      Widgets: {},
+      Background: {
+        w: 1920,
+        h: 1080,
+        rect: true,
+        color: colors.background,
+      },
+
+      Pages: {
+        w: 1920,
+        h: 1080,
+      },
+
+      Loading: {
+        type: LoadingScreenComponent,
+        alpha: 0,
+      },
     };
   }
+
   static getFonts() {
     return [
-      //700
       {
         family: "InterBold",
         url: Utils.asset("../static/fonts/Inter_18pt-Bold.ttf"),
       },
-      //600
       {
         family: "InterSemiBold",
         url: Utils.asset("../static/fonts/Inter_18pt-SemiBold.ttf"),
       },
-      // 400
       {
         family: "InterRegular",
         url: Utils.asset("../static/fonts/Inter_18pt-Regular.ttf"),
@@ -33,7 +45,19 @@ export default class App extends Router.App {
       },
     ];
   }
+
   _setup() {
-    router();
+    setupRouter();
+  }
+
+  // Globalne kontrole loadera
+  showLoader() {
+    console.log("[App] showLoader()");
+    this.tag("Loading").setSmooth("alpha", 1);
+  }
+
+  hideLoader() {
+    console.log("[App] hideLoader()");
+    this.tag("Loading").setSmooth("alpha", 0);
   }
 }
