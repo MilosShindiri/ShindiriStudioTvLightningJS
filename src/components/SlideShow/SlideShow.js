@@ -14,13 +14,11 @@ export default class Slideshow extends Lightning.Component {
         w: 1920,
         h: 697,
         alpha: 1,
-        zIndex: 1,
       },
       NextImage: {
         w: 1920,
         h: 697,
         alpha: 0,
-        zIndex: 2,
       },
     };
   }
@@ -100,11 +98,9 @@ export default class Slideshow extends Lightning.Component {
       currentImage.patch({
         texture: nextImage.texture,
         alpha: 1,
-        zIndex: 1,
       });
       nextImage.patch({
         alpha: 0,
-        zIndex: 2,
       });
     }, 800);
   }

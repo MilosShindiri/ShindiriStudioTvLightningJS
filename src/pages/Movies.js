@@ -3,6 +3,7 @@ import { IMAGE_ROUTE } from "../utils/imageUtils";
 import HorizontalContainer from "../components/HorizontalContainer/HorizontalContainer";
 import HorCard from "../components/horCard";
 import Slideshow from "../components/SlideShow/SlideShow";
+import "@lightningjs/core/inspector";
 
 export default class Movies extends Lightning.Component {
   static _template() {
@@ -12,13 +13,12 @@ export default class Movies extends Lightning.Component {
         h: 1080,
         rect: true,
         color: 0xff151515,
-        zIndex: -1,
       },
       Content: {
         Hero: {
           w: 1920,
           h: 697,
-          HeroSlideshow: { w: 1920, h: 697, type: Slideshow, zIndex: -1 },
+          HeroSlideshow: { w: 1920, h: 697, type: Slideshow },
           Gradient: {
             w: 1920 / 4,
             h: 697,
@@ -67,8 +67,6 @@ export default class Movies extends Lightning.Component {
             },
           },
           MoviesContainer: {
-            // w: 2111,
-            // h: 302,
             y: 697,
             x: 45,
             type: HorizontalContainer,
@@ -89,23 +87,33 @@ export default class Movies extends Lightning.Component {
     return this.tag("HeroSlideshow");
   }
 
+  _debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(this, args);
+      }, wait);
+    };
+  }
+
   set props(props) {
     this._props = props;
     const movies = props.movies;
     if (!movies?.length) return;
-    console.log(movies);
-    const heroMovieTitle = movies[0];
-    const heroImages = heroMovieTitle.image.map(
+
+    const heroMovie = movies[0];
+    const heroImages = heroMovie.image.map(
       (img) => `${IMAGE_ROUTE.IMAGE_W1280}${img}`
     );
-    // console.log(heroMovieTitle);
+
     this.patch({
       Content: {
         Hero: {
           HeroSlideshow: { images: heroImages, transitionDuration: 5000 },
           MovieInfo: {
-            Title: { text: { text: heroMovieTitle.title } },
-            Info: { text: { text: heroMovieTitle.description } },
+            Title: { text: { text: heroMovie.title } },
+            Info: { text: { text: heroMovie.description } },
           },
           MoviesContainer: {
             props: {
@@ -121,12 +129,60 @@ export default class Movies extends Lightning.Component {
           },
         },
       },
-      // Background: { color: props.bgColor || 0xff000000 },
     });
   }
 
   _init() {
     this._setState("MoviesContainer");
+    this._debouncedIndexChange = this._debounce(
+      this._updateHero.bind(this),
+      300
+    );
+  }
+
+  _horizontalContainerIndexChange(index) {
+    this._debouncedIndexChange(index);
+  }
+
+  _updateHero(index) {
+    const movies = this._props?.movies;
+    if (!movies || !movies[index]) return;
+
+    const movie = movies[index];
+
+    this._preloadAdjacentImages(index);
+
+    const heroImages = movie.image.map(
+      (img) => `${IMAGE_ROUTE.IMAGE_W1280}${img}`
+    );
+
+    this.HeroSlideshow.patch({ images: heroImages });
+    this.tag("MovieInfo").patch({
+      Title: { text: { text: movie.title } },
+      Info: { text: { text: movie.description } },
+    });
+  }
+
+  _preloadAdjacentImages(currentIndex) {
+    const { movies } = this._props;
+
+    const preloadTexture = (src) => {
+      new Lightning.textures.ImageTexture({ src });
+    };
+
+    if (movies[currentIndex + 1]) {
+      movies[currentIndex + 1].image.forEach((img) => {
+        const src = `${IMAGE_ROUTE.IMAGE_W1280}${img}`;
+        preloadTexture(src);
+      });
+    }
+
+    if (movies[currentIndex - 1]) {
+      movies[currentIndex - 1].image.forEach((img) => {
+        const src = `${IMAGE_ROUTE.IMAGE_W1280}${img}`;
+        preloadTexture(src);
+      });
+    }
   }
 
   static _states() {

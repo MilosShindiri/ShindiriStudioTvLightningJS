@@ -25,6 +25,7 @@ export const parseMovie = (raw) => {
     rating: raw.vote_average ?? 0,
     director,
     cast,
+    adult: raw.adult ?? false,
   };
 };
 

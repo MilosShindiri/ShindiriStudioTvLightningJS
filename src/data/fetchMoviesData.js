@@ -4,7 +4,7 @@ export default async function fetchMoviesData(page) {
   console.log("[Router] Fetching data for Movies page...");
 
   try {
-    const movies = await movieService.fetchPopularMovies({ page: 2 });
+    const movies = await movieService.fetchPopularMovies({ page: 1 });
 
     console.log("Movies", movies);
 

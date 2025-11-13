@@ -226,12 +226,12 @@ export default class HorizontalContainer extends Lightning.Component {
       this.Items.children[this._focusedIndex]._unfocus();
       this._focusedIndex += 1;
       this._reCalibrateScroll();
-      this.fireAncestors(
-        "$horizontalContainerIndexChange",
-        this._focusedIndex,
-        this._scrollPosition
-      );
-
+      // this.fireAncestors(
+      //   "$horizontalContainerIndexChange",
+      //   this._focusedIndex,
+      //   this._scrollPosition
+      // );
+      this.signal("horizontalContainerIndexChange", this._focusedIndex);
       //console.log("right clicked");
     } else {
       return false;
@@ -245,11 +245,12 @@ export default class HorizontalContainer extends Lightning.Component {
       this.Items.children[this._focusedIndex]?._unfocus();
       this._focusedIndex -= 1;
       this._reCalibrateScroll();
-      this.fireAncestors(
-        "$horizontalContainerIndexChange",
-        this._focusedIndex,
-        this._scrollPosition
-      );
+      // this.fireAncestors(
+      //   "$horizontalContainerIndexChange",
+      //   this._focusedIndex,
+      //   this._scrollPosition
+      // );
+      this.signal("horizontalContainerIndexChange", this._focusedIndex);
     } else {
       return false;
     }

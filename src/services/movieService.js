@@ -10,9 +10,25 @@ export class MovieService {
     if (this.cache.has(key)) {
       return this.cache.get(key);
     }
-    const data = await tmdbService.getPopularMovies(params);
+    let data = await tmdbService.getPopularMovies(params);
+
+    data = data.filter((movie) => !movie.adult && !this.isExplicit(movie));
+
     this.cache.set(key, data);
     return data;
+  }
+
+  isExplicit(movie) {
+    const explicitKeywords = [
+      "sex",
+      "porn",
+      "erotic",
+      "adult",
+      "underwear",
+      "perverted",
+    ];
+    const text = `${movie.title} ${movie.description}`.toLowerCase();
+    return explicitKeywords.some((keyword) => text.includes(keyword));
   }
 
   async fetchMovieDetails(id) {
