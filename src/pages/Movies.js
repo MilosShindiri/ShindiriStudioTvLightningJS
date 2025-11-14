@@ -3,7 +3,6 @@ import { IMAGE_ROUTE } from "../utils/imageUtils";
 import HorizontalContainer from "../components/HorizontalContainer/HorizontalContainer";
 import HorCard from "../components/horCard";
 import Slideshow from "../components/SlideShow/SlideShow";
-import "@lightningjs/core/inspector";
 
 export default class Movies extends Lightning.Component {
   static _template() {
