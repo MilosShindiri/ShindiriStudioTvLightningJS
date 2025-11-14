@@ -4,8 +4,8 @@ import Splash from "./components/SplashScreen/Splash.js";
 import Movies from "./pages/Movies.js";
 import fetchHomeData from "./data/fetchHomeData.js";
 import fetchMoviesData from "./data/fetchMoviesData.js";
-// import Player from './pages/Player.js'
-// import Settings from './pages/Settings.js'
+import Details from "./pages/Details.js";
+import fetchDetailsData from "./data/fetchDetailsData.js";
 // import TopChannels from './widgets/TopChannels.js'
 
 export default () => {
@@ -25,8 +25,11 @@ export default () => {
         widgets: ["Menu"],
         on: fetchMoviesData,
       },
-      //   { path: 'player', component: Player },
-      //   { path: 'settings', component: Settings },
+      {
+        path: "details/:movieId",
+        component: Details,
+        on: fetchDetailsData,
+      },
       { path: "*", redirect: "home" },
     ],
     // widgets: [{ type: TopChannels, name: 'TopChannels' }],

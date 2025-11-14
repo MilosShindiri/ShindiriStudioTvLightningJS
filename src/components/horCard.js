@@ -1,4 +1,4 @@
-import { Lightning, Img } from "@lightningjs/sdk";
+import { Lightning, Img, Router } from "@lightningjs/sdk";
 
 export default class HorCard extends Lightning.Component {
   static _template() {
@@ -54,7 +54,7 @@ export default class HorCard extends Lightning.Component {
   }
 
   _handleEnter() {
-    this.signal("select", this._item.id);
-    return true;
+    Router.navigate(`details/${this._item.id}`, { movie: this._item });
+    console.log(`details/${this._item.id}`, { movie: this._item });
   }
 }

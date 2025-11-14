@@ -118,7 +118,7 @@ export default class Movies extends Lightning.Component {
             props: {
               items: props.movies.map((m) => ({
                 type: HorCard,
-                item: { title: m.title, image: m.poster, id: m.id },
+                item: { id: m.id, title: m.title, image: m.poster },
                 flexItem: { marginRight: 24 },
               })),
               disableScroll: false,
