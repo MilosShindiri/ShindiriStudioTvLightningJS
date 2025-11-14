@@ -1,19 +1,31 @@
-import { Lightning, Utils } from "@lightningjs/sdk";
+import { Utils, Lightning } from "@lightningjs/sdk";
+import lng from "@lightningjs/core";
 
 export default class LoadingScreenComponent extends Lightning.Component {
+  _props = {
+    xPos: 960,
+    yPos: 540,
+  };
+
   static _template() {
     return {
+      w: 1920,
+      h: 1080,
+      rect: true,
+      color: 0xff000000,
+      zIndex: 200,
       Spinner: {
+        w: 100,
+        h: 100,
         x: 960,
         y: 540,
-        w: 80,
-        h: 80,
-        mount: 0.5,
-        texture: Lightning.Tools.getSvgTexture(
-          Utils.asset("images/spinner.svg"),
-          80,
-          80
+        texture: lng.Tools.getSvgTexture(
+          Utils.asset("../../../static/images/spinner.svg"),
+          100,
+          100
         ),
+        mount: 0.5,
+        rotation: 0,
       },
     };
   }
@@ -21,24 +33,28 @@ export default class LoadingScreenComponent extends Lightning.Component {
   get _Spinner() {
     return this.tag("Spinner");
   }
+  set props(props) {
+    this._props = { ...this._props, ...props };
+    const { xPos, yPos } = this._props;
+    this._Spinner.patch({
+      x: xPos,
+      y: yPos,
+    });
+  }
 
   _init() {
     this._spin();
   }
 
   _spin() {
-    this._spinnerAnimation = this._Spinner.animation({
-      duration: 2,
-      repeat: -1,
-      actions: [{ p: "rotation", v: { 0: 0, 1: 2 * Math.PI } }],
-    });
-    this._spinnerAnimation.start();
-  }
-
-  _disable() {
-    if (this._spinnerAnimation) {
-      this._spinnerAnimation.stop();
-      this._spinnerAnimation = null;
-    }
+    this._Spinner
+      .animation({
+        duration: 2, // animation duration in seconds
+        repeat: -1, // repeat indefinitely
+        actions: [
+          { p: "rotation", v: { 0: 0, 1: 10 * Math.PI } }, // rotate 360 degrees
+        ],
+      })
+      .start();
   }
 }

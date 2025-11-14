@@ -12,19 +12,20 @@ export default class App extends Router.App {
       ...super._template(),
 
       Pages: {
+        collision: true,
         w: 1920,
         h: 1080,
       },
-
+      Loading: {
+        type: LoadingScreenComponent,
+        // alpha: 0,
+        visible: false,
+        zIndex: 200,
+      },
       Widgets: {
         Menu: {
           type: Navbar,
         },
-      },
-
-      Loading: {
-        type: LoadingScreenComponent,
-        alpha: 0,
       },
     };
   }
@@ -65,14 +66,23 @@ export default class App extends Router.App {
     );
   }
 
-  // Globalne kontrole loadera
+  $showLoader() {
+    this.tag("Loading").visible = true;
+  }
+
+  $hideLoader() {
+    this.tag("Loading").visible = false;
+  }
+
   // showLoader() {
-  //   console.log("[App] showLoader()");
   //   this.tag("Loading").setSmooth("alpha", 1);
   // }
 
   // hideLoader() {
-  //   console.log("[App] hideLoader()");
   //   this.tag("Loading").setSmooth("alpha", 0);
   // }
+
+  $exitApp() {
+    this.application.closeApp();
+  }
 }
