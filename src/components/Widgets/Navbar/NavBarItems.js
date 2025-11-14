@@ -47,8 +47,8 @@ export default class NavbarItems extends Lightning.Component {
     if (!route) return;
     console.log(this.NavItems);
     // Make sure children exist
-    console.log(this.NavItems.children[1]);
-    this.NavItems.children[1].children.forEach((navElement) => {
+    // console.log(this.NavItems.children[1]);
+    this.NavItems.Items.children.forEach((navElement) => {
       console.log(navElement);
       if (navElement._item) {
         // normalize to lowercase

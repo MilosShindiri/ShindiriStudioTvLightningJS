@@ -81,8 +81,8 @@ export default class HorizontalContainer extends Lightning.Component {
       this.patch({
         h: h + 95,
         Title: {
-          // x: 0,
-          x: x,
+          x: 0,
+          // x: x,
           y: 0,
           // h: 55,
           text: {
