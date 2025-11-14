@@ -6,32 +6,19 @@ import fetchHomeData from "./data/fetchHomeData.js";
 import fetchMoviesData from "./data/fetchMoviesData.js";
 import Details from "./pages/Details.js";
 import fetchDetailsData from "./data/fetchDetailsData.js";
-// import TopChannels from './widgets/TopChannels.js'
 
-export default () => {
-  Router.startRouter({
-    root: "splash",
-    routes: [
-      { path: "splash", component: Splash },
-      {
-        path: "home",
-        component: Home,
-        widgets: ["Menu"],
-        on: fetchHomeData,
-      },
-      {
-        path: "movies",
-        component: Movies,
-        widgets: ["Menu"],
-        on: fetchMoviesData,
-      },
-      {
-        path: "details/:movieId",
-        component: Details,
-        on: fetchDetailsData,
-      },
-      { path: "*", redirect: "home" },
-    ],
-    // widgets: [{ type: TopChannels, name: 'TopChannels' }],
-  });
+export default {
+  root: "splash",
+  routes: [
+    { path: "splash", component: Splash },
+    { path: "home", component: Home, widgets: ["Menu"], on: fetchHomeData },
+    {
+      path: "movies",
+      component: Movies,
+      widgets: ["Menu"],
+      on: fetchMoviesData,
+    },
+    { path: "details/:movieId", component: Details, on: fetchDetailsData },
+    { path: "*", redirect: "home" },
+  ],
 };

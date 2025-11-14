@@ -14,11 +14,7 @@ export default class NavbarItems extends Lightning.Component {
         justifyContent: "flex-start",
         alignItems: "center",
       },
-      Logo: {
-        w: 301,
-        h: 44,
-        src: Utils.asset("images/Logo.png"),
-      },
+      Logo: { w: 301, h: 44, src: Utils.asset("images/Logo.png") },
       NavItems: {
         type: HorizontalContainer,
         x: 80,
@@ -40,28 +36,29 @@ export default class NavbarItems extends Lightning.Component {
   _init() {
     const navData = [{ label: "HOME" }, { label: "MOVIES" }];
 
-    const navItems = navData.map((item) => ({
-      type: NavElement,
-      item,
-    }));
+    const navItems = navData.map((item) => ({ type: NavElement, item }));
 
-    this.NavItems.patch({
-      props: {
-        items: navItems,
-        h: 49,
-        disableScroll: true,
-      },
+    this.NavItems.props = { items: navItems, h: 49, disableScroll: true };
+  }
+
+  set props(props) {
+    const { route } = props;
+    console.log("NavBarItems Props", props);
+    if (!route) return;
+    console.log(this.NavItems);
+    // Make sure children exist
+    console.log(this.NavItems.children[1]);
+    this.NavItems.children[1].children.forEach((navElement) => {
+      console.log(navElement);
+      if (navElement._item) {
+        // normalize to lowercase
+        navElement.props = { route };
+      }
     });
   }
 
   _handleDown() {
     Router.focusPage();
-    return true;
-  }
-  _handleRight() {
-    return true;
-  }
-  _handleLeft() {
     return true;
   }
 }

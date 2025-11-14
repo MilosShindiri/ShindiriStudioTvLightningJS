@@ -4,6 +4,7 @@ import colors from "./styles/colors.js";
 import LoadingScreenComponent from "./components/LoadingScreen/LoadingScreenComponent.js";
 import Navbar from "./components/Widgets/Navbar/Navbar.js";
 import "@lightningjs/core/inspector";
+import router from "./router";
 
 export default class App extends Router.App {
   static _template() {
@@ -50,7 +51,18 @@ export default class App extends Router.App {
   }
 
   _setup() {
-    setupRouter();
+    Router.startRouter(
+      {
+        ...router,
+        afterEachRoute: (request) => {
+          console.log("Current route _hash:", request._hash);
+          this.patch({
+            Widgets: { Menu: { props: { route: request._hash } } },
+          });
+        },
+      },
+      this
+    );
   }
 
   // Globalne kontrole loadera
