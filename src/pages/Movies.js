@@ -122,6 +122,7 @@ export default class Movies extends Lightning.Component {
                 flexItem: { marginRight: 24 },
               })),
               disableScroll: false,
+              // scrollTransition: { duration: 0.8, timingFunction: "ease" },
               w: 1700,
               h: 302,
             },
@@ -155,7 +156,7 @@ export default class Movies extends Lightning.Component {
       (img) => `${IMAGE_ROUTE.IMAGE_W1280}${img}`
     );
 
-    this.HeroSlideshow.patch({ images: heroImages });
+    this.HeroSlideshow.setImagesOnFocues(heroImages); // this set me background image logic
     this.tag("MovieInfo").patch({
       Title: { text: { text: movie.title } },
       Info: { text: { text: movie.description } },
@@ -204,3 +205,20 @@ export default class Movies extends Lightning.Component {
     ];
   }
 }
+
+// MoviesContainer: {
+//   props: {
+//     items: props.movies.map((m) => ({
+//       type: HorCard,
+//       item: { id: m.id, title: m.title, image: m.poster },
+//       flexItem: { marginRight: 24 },
+//     })),
+//     disableScroll: false,
+//     w: 1700,
+//     h: 302,
+//     scrollTransition: {
+//       duration: 0.3,
+//       timingFunction: "ease"
+//     },
+//   },
+// },
