@@ -6,6 +6,7 @@ import fetchHomeData from "./data/fetchHomeData.js";
 import fetchMoviesData from "./data/fetchMoviesData.js";
 import Details from "./pages/Details.js";
 import fetchDetailsData from "./data/fetchDetailsData.js";
+import Player from "./pages/Player";
 
 export default {
   root: "splash",
@@ -19,6 +20,13 @@ export default {
       on: fetchMoviesData,
     },
     { path: "details/:movieId", component: Details, on: fetchDetailsData },
+    {
+      path: "player",
+      component: Player,
+      options: {
+        reuseInstance: false,
+      },
+    },
     { path: "*", redirect: "home" },
   ],
 };

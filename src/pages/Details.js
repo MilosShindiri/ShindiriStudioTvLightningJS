@@ -183,8 +183,6 @@ export default class Details extends Lightning.Component {
     if (this._detailsData) {
       this._updateUI();
     }
-
-    this._setState("WatchNow");
   }
 
   _updateUI() {
@@ -199,6 +197,7 @@ export default class Details extends Lightning.Component {
           } • ${movie.releaseYear} • IMDb: ${movie.rating}`,
         },
       },
+
       MovieContent: {
         Poster: movie.thumbnail ? { src: movie.thumbnail } : {},
         Details: {
@@ -223,14 +222,15 @@ export default class Details extends Lightning.Component {
         },
       },
     });
+    this._setState("WatchNow");
   }
 
   static _states() {
     return [
       class WatchNow extends this {
-        $enter() {
-          this._refocus();
-        }
+        // $enter() {
+        //   this._refocus();
+        // }
 
         _getFocused() {
           return this.WatchNow;
@@ -240,11 +240,15 @@ export default class Details extends Lightning.Component {
           this._setState("BackButton");
           return true;
         }
+
+        _handleEnter() {
+          Router.navigate("player");
+        }
       },
       class BackButton extends this {
-        $enter() {
-          this._refocus();
-        }
+        // $enter() {
+        //   this._refocus();
+        // }
 
         _getFocused() {
           return this.BackButton;
@@ -256,8 +260,15 @@ export default class Details extends Lightning.Component {
         }
 
         _handleEnter() {
-          Router.back();
-          return true;
+          const router = Router.getHistory().filter(
+            (history) => history.hash != "splash" && history.hash != "cmp"
+          );
+          if (router.length) {
+            Router.setHistory([...router]);
+            Router.back();
+          } else {
+            Router.navigate("home");
+          }
         }
       },
     ];

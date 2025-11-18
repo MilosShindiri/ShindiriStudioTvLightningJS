@@ -1,4 +1,4 @@
-import Lightning from "@lightningjs/sdk/src/Lightning";
+import { Lightning, Router } from "@lightningjs/sdk";
 
 export default class Button extends Lightning.Component {
   static _template() {
