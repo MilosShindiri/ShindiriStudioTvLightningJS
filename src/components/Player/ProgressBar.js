@@ -3,6 +3,7 @@ import formatTimeHMS from "../../utils/formatTimeHMS";
 
 export default class ProgressBar extends Lightning.Component {
   _newTime = null;
+
   static _template() {
     return {
       w: 1690,
@@ -79,10 +80,6 @@ export default class ProgressBar extends Lightning.Component {
     return this.tag("EndTime");
   }
 
-  get _FillBar() {
-    return this.tag("FillBar");
-  }
-
   get _RedRect() {
     return this.tag("RedRect");
   }
@@ -113,6 +110,48 @@ export default class ProgressBar extends Lightning.Component {
     this.progress(progress);
   }
 
+  _handleRight() {
+    if (this._newTime == null) {
+      this._newTime = VideoPlayer.currentTime;
+    }
+    this._newTime = this.computeSeekTime(5);
+    this._updateProgressBar(); // samo update UI
+  }
+
+  _handleLeft() {
+    if (this._newTime == null) {
+      this._newTime = VideoPlayer.currentTime;
+    }
+    this._newTime = this.computeSeekTime(-5);
+    this._updateProgressBar(); // samo update UI
+  }
+
+  // Key release events
+  _handleRightRelease() {
+    this._commitSeek();
+  }
+
+  _handleLeftRelease() {
+    this._commitSeek();
+  }
+
+  _commitSeek() {
+    if (this._newTime != null) {
+      VideoPlayer.seek(this._newTime); // sada menjamo video
+      this._newTime = null; // reset
+      this._updateProgressBar();
+    }
+  }
+
+  computeSeekTime(timeToAdd) {
+    const seekTime = this._newTime + timeToAdd;
+    return seekTime < 0
+      ? 0
+      : seekTime > VideoPlayer.duration
+      ? VideoPlayer.duration
+      : seekTime;
+  }
+
   _focus() {
     this._Scrubber.visible = true;
     this.patch({
@@ -131,13 +170,9 @@ export default class ProgressBar extends Lightning.Component {
       },
     });
   }
+
   _unfocus() {
     this._Scrubber.visible = false;
-    // if (this._newTime !== 0) {
-    //   this._newTime = null;
-    //   this._updateProgressBar();
-    // }
-
     this.patch({
       Bar: {
         BackgroundBar: {
