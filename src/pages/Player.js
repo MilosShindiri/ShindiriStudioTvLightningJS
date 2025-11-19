@@ -9,6 +9,7 @@ import { loader, unloader } from "../components/Player/HLS";
 import PlayerControllButton from "../components/Player/PlayerControllButton";
 import HorizontaContainer from "../components/HorizontalContainer/HorizontalContainer";
 import ProgressBar from "../components/Player/ProgressBar";
+import formatTimeHMS from "../utils/formatTimeHMS";
 
 const buttons = [
   { label: "rewind", src: "rewind.png" },
@@ -106,6 +107,20 @@ export default class Player extends Lightning.Component {
 
     this._targetIndex = 1;
     this._CenteredButtonWrapper._refocus();
+  }
+
+  $videoPlayerLoadedData() {
+    this._ProgressBar._EndTime.patch({
+      text: {
+        text: formatTimeHMS(VideoPlayer.duration),
+        fontFace: "InterRegular",
+        fontSize: 26,
+      },
+    });
+  }
+
+  $videoPlayerTimeUpdate() {
+    this._ProgressBar._updateProgressBar();
   }
 
   _getFocused() {

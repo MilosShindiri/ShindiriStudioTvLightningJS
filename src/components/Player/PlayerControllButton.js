@@ -46,11 +46,14 @@ export default class PlayerControllButton extends Lightning.Component {
       }
     }
   }
+
   _handleBack(e) {
     e.preventDefault();
     this.fireAncestors("$exitVideo", e);
   }
-  _handleForward() {}
+  _handleForward() {
+    VideoPlayer.skip(5);
+  }
   _handleRewind() {}
   _handlePlayPause() {
     VideoPlayer.playPause();
@@ -61,5 +64,7 @@ export default class PlayerControllButton extends Lightning.Component {
       ),
     });
   }
-  _handleBackwards() {}
+  _handleBackwards() {
+    VideoPlayer.skip(-5);
+  }
 }

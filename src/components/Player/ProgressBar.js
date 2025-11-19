@@ -1,6 +1,8 @@
 import { Colors, Lightning, VideoPlayer } from "@lightningjs/sdk";
+import formatTimeHMS from "../../utils/formatTimeHMS";
 
 export default class ProgressBar extends Lightning.Component {
+  _newTime = null;
   static _template() {
     return {
       w: 1690,
@@ -93,6 +95,24 @@ export default class ProgressBar extends Lightning.Component {
     return this.tag("BackgroundBar");
   }
 
+  progress(progress) {
+    this._RedRect.setSmooth("w", progress);
+    this._Scrubber.setSmooth("x", progress);
+  }
+
+  _updateProgressBar() {
+    const newTimeToShow =
+      this._newTime != null ? this._newTime : VideoPlayer.currentTime;
+    this.patch({
+      CurrentTime: {
+        text: formatTimeHMS(newTimeToShow),
+      },
+    });
+    const progress =
+      (newTimeToShow / VideoPlayer.duration) * this._BackgroundBar.w;
+    this.progress(progress);
+  }
+
   _focus() {
     this._Scrubber.visible = true;
     this.patch({
@@ -117,6 +137,7 @@ export default class ProgressBar extends Lightning.Component {
     //   this._newTime = null;
     //   this._updateProgressBar();
     // }
+
     this.patch({
       Bar: {
         BackgroundBar: {
