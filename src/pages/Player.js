@@ -1,4 +1,10 @@
-import { Lightning, VideoPlayer, Colors, Router } from "@lightningjs/sdk";
+import {
+  Lightning,
+  VideoPlayer,
+  Colors,
+  Router,
+  Utils,
+} from "@lightningjs/sdk";
 import { loader, unloader } from "../components/Player/HLS";
 import PlayerControllButton from "../components/Player/PlayerControllButton";
 import HorizontaContainer from "../components/HorizontalContainer/HorizontalContainer";
@@ -19,6 +25,19 @@ export default class Player extends Lightning.Component {
       rect: true,
       colorTop: Colors("#000000").alpha(0).get(),
       colorBottom: Colors("#000000").get(),
+      // Spinner: {
+      //   w: 100,
+      //   h: 100,
+      //   x: 960,
+      //   y: 540,
+      //   texture: Lightning.Tools.getSvgTexture(
+      //     Utils.asset("images/spinner.svg"),
+      //     100,
+      //     100
+      //   ),
+      //   mount: 0.5,
+      //   rotation: 0,
+      // },
       Controller: {
         w: 1690,
         h: 156,
@@ -28,8 +47,7 @@ export default class Player extends Lightning.Component {
           w: 995,
           h: 90,
           BackButton: {
-            w: 66,
-            h: 66,
+            y: 45,
             type: PlayerControllButton,
             color: Colors("#ffffff").alpha(0.3).get(),
             props: {
@@ -41,61 +59,21 @@ export default class Player extends Lightning.Component {
           },
           CenteredButtonWrapper: {
             x: 845,
+            y: 45,
             mountX: 0.5,
             w: 312,
+            h: 200,
             flex: {
               direction: "row",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "center",
             },
             type: HorizontaContainer,
-            // disableScroll: true,
           },
-          ProgressBarWrapper: {
-            w: 1690,
-            h: 31,
-            x: 115,
-            y: 961,
-            flex: {
-              flex: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            CurrentTime: {
-              color: 0xffffffff,
-              Text: {
-                w: 79,
-                h: 31,
-                text: {
-                  text: "",
-                  fontSize: 26,
-                  textAlign: "center",
-                },
-              },
-            },
-            ProgressBar: {
-              type: ProgressBar,
-              w: 1404,
-              h: 9,
-              alpha: 0.1,
-              flexItem: {
-                marginLeft: 44,
-                marginRight: 44,
-              },
-            },
-            EndTime: {
-              color: 0xffffffff,
-              Text: {
-                w: 119,
-                h: 31,
-                text: {
-                  text: "",
-                  fontSize: 26,
-                  textAlign: "center",
-                },
-              },
-            },
-          },
+        },
+        ProgressBar: {
+          y: 125,
+          type: ProgressBar,
         },
       },
     };
@@ -162,8 +140,8 @@ export default class Player extends Lightning.Component {
     return this.tag("CenteredButtonWrapper");
   }
 
-  get _ProgressBarWrapper() {
-    return this.tag("ProgressBarWrapper");
+  get _ProgressBar() {
+    return this.tag("ProgressBar");
   }
 
   get _CurrentTime() {
@@ -205,13 +183,30 @@ export default class Player extends Lightning.Component {
         _handleRight() {
           this._setState("CenteredButtonWrapper");
         }
+        _handleDown() {
+          this._setState("ProgressBar");
+        }
       },
       class CenteredButtonWrapper extends this {
         _getFocused() {
           return this._CenteredButtonWrapper;
         }
+        _handleDown() {
+          this._setState("ProgressBar");
+        }
         _handleLeft() {
           this._setState("BackButton");
+        }
+      },
+      class ProgressBar extends this {
+        _getFocused() {
+          return this._ProgressBar;
+        }
+        _handleUp() {
+          this._setState("CenteredButtonWrapper");
+        }
+        _handleBack() {
+          this._setState("CenteredButtonWrapper");
         }
       },
     ];
