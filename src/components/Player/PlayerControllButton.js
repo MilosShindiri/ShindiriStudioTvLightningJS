@@ -4,8 +4,11 @@ export default class PlayerControllButton extends Lightning.Component {
   _props = {
     label: "",
   };
+
   set props(props) {
     const { w, h, src, label } = props;
+    this._pauseTexture = Utils.asset("images/player/pause.png");
+    this._playTexture = Utils.asset("images/player/play.png");
     this.patch({
       w: w,
       h: h,
@@ -54,16 +57,15 @@ export default class PlayerControllButton extends Lightning.Component {
   _handleForward() {
     VideoPlayer.skip(5);
   }
-  _handleRewind() {}
+
   _handlePlayPause() {
     VideoPlayer.playPause();
     const isPlaying = VideoPlayer.playing;
     this.patch({
-      src: Utils.asset(
-        "images/player/" + (isPlaying ? "play.png" : "pause.png")
-      ),
+      src: isPlaying ? this._playTexture : this._pauseTexture,
     });
   }
+
   _handleBackwards() {
     VideoPlayer.skip(-5);
   }

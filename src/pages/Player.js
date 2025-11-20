@@ -26,19 +26,19 @@ export default class Player extends Lightning.Component {
       rect: true,
       colorTop: Colors("#000000").alpha(0).get(),
       colorBottom: Colors("#000000").get(),
-      // Spinner: {
-      //   w: 100,
-      //   h: 100,
-      //   x: 960,
-      //   y: 540,
-      //   texture: Lightning.Tools.getSvgTexture(
-      //     Utils.asset("images/spinner.svg"),
-      //     100,
-      //     100
-      //   ),
-      //   mount: 0.5,
-      //   rotation: 0,
-      // },
+      Spinner: {
+        w: 100,
+        h: 100,
+        x: 960,
+        y: 540,
+        texture: Lightning.Tools.getSvgTexture(
+          Utils.asset("images/spinner.svg"),
+          100,
+          100
+        ),
+        mount: 0.5,
+        rotation: 0,
+      },
       Controller: {
         w: 1690,
         h: 156,
@@ -105,8 +105,8 @@ export default class Player extends Lightning.Component {
     });
     this._setState("CenteredButtonWrapper");
 
-    this._targetIndex = 1;
-    this._CenteredButtonWrapper._refocus();
+    // this._CenteredButtonWrapper._refocus();
+    this._spin();
   }
 
   $videoPlayerLoadedData() {
@@ -117,10 +117,26 @@ export default class Player extends Lightning.Component {
         fontSize: 26,
       },
     });
+    this._hideSpinner(); // stop spinner when video is ready
+  }
+
+  $videoPlayerSeeking() {
+    if (!this._Spinner.visible) this._Spinner.visible = true;
+  }
+  $videoPlayerSeeked() {
+    this._Spinner.visible = false;
   }
 
   $videoPlayerTimeUpdate() {
     this._ProgressBar._updateProgressBar();
+  }
+
+  _showSpinner() {
+    this._Spinner.visible = true;
+  }
+
+  _hideSpinner() {
+    this._Spinner.visible = false;
   }
 
   _getFocused() {
@@ -153,6 +169,10 @@ export default class Player extends Lightning.Component {
 
   get _CenteredButtonWrapper() {
     return this.tag("CenteredButtonWrapper");
+  }
+
+  get _Spinner() {
+    return this.tag("Spinner");
   }
 
   get _ProgressBar() {
@@ -225,5 +245,16 @@ export default class Player extends Lightning.Component {
         }
       },
     ];
+  }
+  _spin() {
+    this._Spinner
+      .animation({
+        duration: 2, // animation duration in seconds
+        repeat: -1, // repeat indefinitely
+        actions: [
+          { p: "rotation", v: { 0: 0, 1: 10 * Math.PI } }, // rotate 360 degrees
+        ],
+      })
+      .start();
   }
 }

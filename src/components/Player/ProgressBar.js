@@ -3,6 +3,12 @@ import formatTimeHMS from "../../utils/formatTimeHMS";
 
 export default class ProgressBar extends Lightning.Component {
   _newTime = null;
+  _skipInterval = null;
+  _isHoldingRight = false;
+  _isHoldingLeft = false;
+  _props = {
+    onActivity: null, // Player će poslati funkciju
+  };
 
   static _template() {
     return {
@@ -93,8 +99,8 @@ export default class ProgressBar extends Lightning.Component {
   }
 
   progress(progress) {
-    this._RedRect.setSmooth("w", progress);
-    this._Scrubber.setSmooth("x", progress);
+    this._RedRect.setSmooth("w", progress, { duration: 0.2 });
+    this._Scrubber.setSmooth("x", progress, { duration: 0.2 });
   }
 
   _updateProgressBar() {
@@ -111,34 +117,57 @@ export default class ProgressBar extends Lightning.Component {
   }
 
   _handleRight() {
-    if (this._newTime == null) {
-      this._newTime = VideoPlayer.currentTime;
+    if (!this._isHoldingRight) {
+      this._isHoldingRight = true;
+
+      if (this._newTime == null) {
+        this._newTime = VideoPlayer.currentTime;
+      }
+
+      // Start 1ms interval (realno će biti 4–10ms zbog V8)
+      this._skipInterval = setInterval(() => {
+        this._newTime = this.computeSeekTime(1); // +1 sekunda, menjaš na +0.1 ako želiš
+        this._updateProgressBar(); // update UI
+      }, 1);
     }
-    this._newTime = this.computeSeekTime(5);
-    this._updateProgressBar(); // samo update UI
   }
 
   _handleLeft() {
-    if (this._newTime == null) {
-      this._newTime = VideoPlayer.currentTime;
+    if (!this._isHoldingLeft) {
+      this._isHoldingLeft = true;
+
+      if (this._newTime == null) {
+        this._newTime = VideoPlayer.currentTime;
+      }
+
+      this._skipInterval = setInterval(() => {
+        this._newTime = this.computeSeekTime(-1);
+        this._updateProgressBar();
+      }, 1);
     }
-    this._newTime = this.computeSeekTime(-5);
-    this._updateProgressBar(); // samo update UI
   }
 
   // Key release events
   _handleRightRelease() {
-    this._commitSeek();
+    this._stopSkipping();
   }
 
   _handleLeftRelease() {
-    this._commitSeek();
+    this._stopSkipping();
   }
 
-  _commitSeek() {
+  _stopSkipping() {
+    if (this._skipInterval) {
+      clearInterval(this._skipInterval);
+      this._skipInterval = null;
+    }
+
+    this._isHoldingRight = false;
+    this._isHoldingLeft = false;
+
     if (this._newTime != null) {
-      VideoPlayer.seek(this._newTime); // sada menjamo video
-      this._newTime = null; // reset
+      VideoPlayer.seek(this._newTime);
+      this._newTime = null;
       this._updateProgressBar();
     }
   }
