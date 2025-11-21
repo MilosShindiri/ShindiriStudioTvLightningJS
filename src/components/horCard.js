@@ -1,4 +1,5 @@
 import { Lightning, Img, Router } from "@lightningjs/sdk";
+import colors from "../styles/colors";
 
 export default class HorCard extends Lightning.Component {
   static _template() {
@@ -20,7 +21,7 @@ export default class HorCard extends Lightning.Component {
         text: {
           fontSize: 20,
           fontFace: "InterRegular",
-          textColor: 0xffffffff,
+          textColor: colors.text,
         },
       },
     };

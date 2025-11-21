@@ -3,6 +3,7 @@ import { IMAGE_ROUTE } from "../utils/imageUtils";
 import HorizontalContainer from "../components/HorizontalContainer/HorizontalContainer";
 import HorCard from "../components/horCard";
 import Slideshow from "../components/SlideShow/SlideShow";
+import colors from "../styles/colors";
 
 export default class Movies extends Lightning.Component {
   static _template() {
@@ -11,7 +12,7 @@ export default class Movies extends Lightning.Component {
         w: 1920,
         h: 1080,
         rect: true,
-        color: 0xff151515,
+        color: colors.surface,
       },
       Content: {
         Hero: {
@@ -22,23 +23,23 @@ export default class Movies extends Lightning.Component {
             w: 1920 / 4,
             h: 697,
             rect: true,
-            color: 0xff151515,
+            color: colors.surface,
           },
           Gradient1: {
             w: 1920 / 3,
             h: 697,
             x: 1920 / 4,
             rect: true,
-            colorLeft: 0xff151515,
-            colorRight: 0xcc151515,
+            colorLeft: colors.surface,
+            colorRight: colors.surfaceSemi,
           },
           Gradient2: {
             w: 1920,
             h: 697,
             x: 1920 / 3 + 1920 / 4,
             rect: true,
-            colorLeft: 0xcc151515,
-            colorRight: 0x00151515,
+            colorLeft: colors.surfaceSemi,
+            colorRight: colors.surfaceTransparent,
           },
           MovieInfo: {
             w: 698,
@@ -51,14 +52,14 @@ export default class Movies extends Lightning.Component {
               text: {
                 fontFace: "Inter-Bold",
                 fontSize: 28,
-                textColor: 0xffffffff,
+                textColor: colors.text,
               },
             },
             Info: {
               text: {
                 fontFace: "Inter-Regular",
                 fontSize: 22,
-                textColor: 0xffffffff,
+                textColor: colors.text,
                 wordWrap: true,
                 wordWrapWidth: 698,
                 lineHeight: 31,

@@ -1,4 +1,5 @@
 import { Colors, Lightning, VideoPlayer, Utils } from "@lightningjs/sdk";
+import colors from "../../styles/colors";
 
 export default class PlayerControllButton extends Lightning.Component {
   _props = {
@@ -14,18 +15,17 @@ export default class PlayerControllButton extends Lightning.Component {
       h: h,
       rect: true,
       src: Utils.asset(src),
-      color: Colors("#ffffff").alpha(0.3).get(),
+      color: Colors(colors.white).alpha(0.3).get(),
     });
     this._props.label = label;
   }
 
   _focus() {
-    // console.log('focus')
-    this.patch({ color: Colors("#ed1c24").get() });
+    this.patch({ color: Colors(colors.accentRed).get() });
   }
 
   _unfocus() {
-    this.patch({ color: Colors("#ffffff").alpha(0.3).get() });
+    this.patch({ color: Colors(colors.white).alpha(0.3).get() });
   }
 
   _handleEnter(e) {

@@ -1,14 +1,12 @@
 import { Colors, Lightning, VideoPlayer } from "@lightningjs/sdk";
 import formatTimeHMS from "../../utils/formatTimeHMS";
+import colors from "../../styles/colors";
 
 export default class ProgressBar extends Lightning.Component {
   _newTime = null;
-  _skipInterval = null;
-  _isHoldingRight = false;
-  _isHoldingLeft = false;
-  _props = {
-    onActivity: null, // Player će poslati funkciju
-  };
+  _seeking = false;
+  _seekDirection = 0;
+  _rafId = null;
 
   static _template() {
     return {
@@ -38,15 +36,15 @@ export default class ProgressBar extends Lightning.Component {
             13,
             0,
             2,
-            Colors("#d9d9d9").alpha(0.1).get(),
+            Colors(colors.grayLight).alpha(0.1).get(),
             true,
-            Colors("#d9d9d9").alpha(0.1).get()
+            Colors(colors.grayLight).alpha(0.1).get()
           ),
         },
         RedRect: {
           w: 0,
           h: 13,
-          color: Colors("#ED1C24").get(),
+          color: Colors(colors.accentRed).get(),
           rect: true,
         },
         Scrubber: {
@@ -61,9 +59,9 @@ export default class ProgressBar extends Lightning.Component {
             23,
             10,
             4,
-            Colors("#ed1c24").get(),
+            Colors(colors.accentRed).get(),
             true,
-            Colors("#d9d9d9").get()
+            Colors(colors.grayLight).get()
           ),
         },
       },
@@ -98,87 +96,136 @@ export default class ProgressBar extends Lightning.Component {
     return this.tag("BackgroundBar");
   }
 
-  progress(progress) {
-    this._RedRect.setSmooth("w", progress, { duration: 0.2 });
-    this._Scrubber.setSmooth("x", progress, { duration: 0.2 });
+  progress(px) {
+    this._RedRect.w = px;
+    this._Scrubber.x = px;
   }
 
+  // crtam progress bar sa showTime
+  // Ako korisnik trenutno seek-a (_newTime postoji) → koristi _newTime
+  // Ako ne → koristi trenutno vrijeme videa (VideoPlayer.currentTime)
   _updateProgressBar() {
-    const newTimeToShow =
+    const shownTime =
       this._newTime != null ? this._newTime : VideoPlayer.currentTime;
+
     this.patch({
       CurrentTime: {
-        text: formatTimeHMS(newTimeToShow),
+        text: formatTimeHMS(shownTime),
       },
     });
-    const progress =
-      (newTimeToShow / VideoPlayer.duration) * this._BackgroundBar.w;
-    this.progress(progress);
+
+    const px = (shownTime / VideoPlayer.duration) * this._BackgroundBar.w;
+    this.progress(px);
   }
 
-  _handleRight() {
-    if (!this._isHoldingRight) {
-      this._isHoldingRight = true;
+  //   computeSeekTime: računa novo vrijeme, brine da ne izađe iz opsega [0, duration]
+  // _updateProgressBar(): update UI (tekst, crvena traka, scrubber)
+  // requestAnimationFrame: ponovo poziva _startSeekLoop() na sljedećem frame-u
+  // Ovde nastaje kontinuirana petlja dok korisnik drži dugme.
+  _startSeekLoop() {
+    console.warn("WSTV", this._newTime);
 
-      if (this._newTime == null) {
-        this._newTime = VideoPlayer.currentTime;
-      }
+    if (!this._seeking) return;
 
-      // Start 1ms interval (realno će biti 4–10ms zbog V8)
-      this._skipInterval = setInterval(() => {
-        this._newTime = this.computeSeekTime(1); // +1 sekunda, menjaš na +0.1 ako želiš
-        this._updateProgressBar(); // update UI
-      }, 1);
-    }
+    this._newTime = this.computeSeekTime(this._seekDirection);
+
+    this._updateProgressBar();
+
+    this._rafId = requestAnimationFrame(() => this._startSeekLoop());
   }
+  //   _startSeekLoop() izračunava novo vrijeme (_newTime)
+  // update-uje progress bar (_updateProgressBar())
+  // i poziva se ponovo na sljedećem frame-u
+  // To stvara kontinuiranu petlju:
+  // frame #1 → update _newTime + UI
+  // frame #2 → update _newTime + UI
+  // frame #3 → update _newTime + UI
+  // … sve dok _seeking = true
+  // Bez ovoga, seek bi bio “jedan korak” i UI ne bi reagovao glatko.
+  // U _beginSeeking(direction):
+  // _seeking = true → signalizira da petlja treba raditi
+  // _seekDirection se postavlja na 1 (desno) ili -1 (lijevo)
+  // _newTime se inicijalizuje na trenutno vrijeme videa ako još nije postavljeno
+  // Pokreće se _startSeekLoop()
 
-  _handleLeft() {
-    if (!this._isHoldingLeft) {
-      this._isHoldingLeft = true;
+  _beginSeeking(direction) {
+    if (this._seeking) return; // ako već seekujemo, ne radi ništa
 
-      if (this._newTime == null) {
-        this._newTime = VideoPlayer.currentTime;
-      }
+    this._seeking = true; // sada smo u “seeking” modu
+    this._seekDirection = direction;
 
-      this._skipInterval = setInterval(() => {
-        this._newTime = this.computeSeekTime(-1);
-        this._updateProgressBar();
-      }, 1);
-    }
-  }
-
-  // Key release events
-  _handleRightRelease() {
-    this._stopSkipping();
-  }
-
-  _handleLeftRelease() {
-    this._stopSkipping();
-  }
-
-  _stopSkipping() {
-    if (this._skipInterval) {
-      clearInterval(this._skipInterval);
-      this._skipInterval = null;
+    if (this._newTime == null) {
+      this._newTime = VideoPlayer.currentTime;
     }
 
-    this._isHoldingRight = false;
-    this._isHoldingLeft = false;
+    this._startSeekLoop(); // start samo JEDAN loop
+  }
+
+  //   _seeking = false → signal za prekid petlje
+  // _seekDirection = 0
+  // cancelAnimationFrame(_rafId) → zaustavlja petlju
+  // Ako postoji _newTime → stvarno seek-a video:
+  _stopSeeking() {
+    if (!this._seeking) return;
+
+    this._seeking = false;
+    this._seekDirection = 0;
+
+    if (this._rafId) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
+    }
 
     if (this._newTime != null) {
       VideoPlayer.seek(this._newTime);
       this._newTime = null;
+      // Update UI jednom finalnom _updateProgressBar() da bar prikazuje tačno stanje videa
+    }
+    this._updateProgressBar();
+  }
+
+  computeSeekTime(delta) {
+    const next = this._newTime + delta;
+
+    if (next < 0) return 0;
+    if (next > VideoPlayer.duration) return VideoPlayer.duration;
+    return next;
+  }
+
+  _handleRight() {
+    clearTimeout(this._singlePressTimeout);
+
+    this._singlePressTimeout = setTimeout(() => {
+      this._beginSeeking(5); // dug pritisak → loop
+    }, 200); // 200ms threshold za hold
+  }
+
+  _handleLeft() {
+    clearTimeout(this._singlePressTimeout);
+
+    this._singlePressTimeout = setTimeout(() => {
+      this._beginSeeking(-5); // dug pritisak → loop unazad
+    }, 200); // 200ms threshold za hold
+  }
+
+  _handleRightRelease() {
+    clearTimeout(this._singlePressTimeout);
+    if (!this._seeking) {
+      VideoPlayer.seek(VideoPlayer.currentTime + 1); // kratki klik → jump 1s
       this._updateProgressBar();
+    } else {
+      this._stopSeeking();
     }
   }
 
-  computeSeekTime(timeToAdd) {
-    const seekTime = this._newTime + timeToAdd;
-    return seekTime < 0
-      ? 0
-      : seekTime > VideoPlayer.duration
-      ? VideoPlayer.duration
-      : seekTime;
+  _handleLeftRelease() {
+    clearTimeout(this._singlePressTimeout);
+    if (!this._seeking) {
+      VideoPlayer.seek(VideoPlayer.currentTime - 1);
+      this._updateProgressBar();
+    } else {
+      this._stopSeeking();
+    }
   }
 
   _focus() {
@@ -191,9 +238,9 @@ export default class ProgressBar extends Lightning.Component {
             13,
             0,
             2,
-            Colors("#ED1C24").get(),
+            Colors(colors.accentRed).get(),
             true,
-            Colors("#d9d9d9").alpha(0.1).get()
+            Colors(colors.grayLight).alpha(0.1).get()
           ),
         },
       },
@@ -210,9 +257,9 @@ export default class ProgressBar extends Lightning.Component {
             13,
             0,
             2,
-            Colors("#d9d9d9").alpha(0.1).get(),
+            Colors(colors.grayLight).alpha(0.1).get(),
             true,
-            Colors("#d9d9d9").alpha(0.1).get()
+            Colors(colors.grayLight).alpha(0.1).get()
           ),
         },
       },

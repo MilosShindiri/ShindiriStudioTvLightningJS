@@ -5,6 +5,8 @@ import {
   Router,
   Utils,
 } from "@lightningjs/sdk";
+import { SCREEN } from "../constants/dimensions";
+import colors from "../styles/colors";
 import { loader, unloader } from "../components/Player/HLS";
 import PlayerControllButton from "../components/Player/PlayerControllButton";
 import HorizontaContainer from "../components/HorizontalContainer/HorizontalContainer";
@@ -21,16 +23,16 @@ export default class Player extends Lightning.Component {
     return {
       x: 0,
       y: 0,
-      w: 1920,
-      h: 1080,
+      w: SCREEN.w,
+      h: SCREEN.h,
       rect: true,
-      colorTop: Colors("#000000").alpha(0).get(),
-      colorBottom: Colors("#000000").get(),
+      colorTop: Colors(colors.black).alpha(0).get(),
+      colorBottom: Colors(colors.black).get(),
       Spinner: {
         w: 100,
         h: 100,
-        x: 960,
-        y: 540,
+        x: SCREEN.w_half,
+        y: SCREEN.h_half,
         texture: Lightning.Tools.getSvgTexture(
           Utils.asset("images/spinner.svg"),
           100,
@@ -50,7 +52,7 @@ export default class Player extends Lightning.Component {
           BackButton: {
             y: 45,
             type: PlayerControllButton,
-            color: Colors("#ffffff").alpha(0.3).get(),
+            color: Colors(colors.white).alpha(0.3).get(),
             props: {
               w: 66,
               h: 66,
@@ -117,7 +119,11 @@ export default class Player extends Lightning.Component {
         fontSize: 26,
       },
     });
-    this._hideSpinner(); // stop spinner when video is ready
+    this._hideSpinner();
+  }
+
+  $videoPlayerPlaying() {
+    this._hideSpinner();
   }
 
   $videoPlayerSeeking() {
@@ -190,7 +196,7 @@ export default class Player extends Lightning.Component {
   _enable() {
     this.fireAncestors("$punchHole");
     VideoPlayer.position(0, 0);
-    VideoPlayer.size(1920, 1080);
+    VideoPlayer.size(SCREEN.w, SCREEN.h);
     VideoPlayer.consumer(this);
     VideoPlayer.loader(loader);
     VideoPlayer.unloader(unloader);
@@ -215,6 +221,7 @@ export default class Player extends Lightning.Component {
         _getFocused() {
           return this._BackButton;
         }
+
         _handleRight() {
           this._setState("CenteredButtonWrapper");
         }

@@ -1,12 +1,13 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
 import VerticalContainer from "../VerticalContainer/VerticalContainer";
 import VerticalItem from "../Home/VerticalItem";
+import colors from "../../styles/colors";
 
 export default class TopChannels extends Lightning.Component {
   static _template() {
     return {
       rect: true,
-      color: 0xff000000,
+      color: colors.black,
       w: 312,
       h: 837,
       shader: { type: Lightning.shaders.RoundedRectangle, radius: 16 },

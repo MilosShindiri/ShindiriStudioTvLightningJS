@@ -1,5 +1,6 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import Button from "../components/Button";
+import colors from "../styles/colors";
 
 export default class Details extends Lightning.Component {
   static _template() {
@@ -8,7 +9,7 @@ export default class Details extends Lightning.Component {
         w: 1920,
         h: 1080,
         rect: true,
-        color: 0xff151515,
+        color: colors.surface,
       },
       Content: {
         w: 1083,
@@ -24,7 +25,7 @@ export default class Details extends Lightning.Component {
             text: "",
             fontFace: "Inter-Regular",
             fontSize: 20,
-            textColor: 0xffffffff,
+            textColor: colors.text,
             lineHeight: 28,
           },
         },
@@ -49,7 +50,7 @@ export default class Details extends Lightning.Component {
                 text: "",
                 fontFace: "Inter-Bold",
                 fontSize: 28,
-                textColor: 0xffffffff,
+                textColor: colors.text,
               },
             },
             Paragraph: {
@@ -58,7 +59,7 @@ export default class Details extends Lightning.Component {
                 text: "",
                 fontFace: "Inter-Regular",
                 fontSize: 18,
-                textColor: 0xffffffff,
+                textColor: colors.text,
                 lineHeight: 26,
                 wordWrap: true,
                 wordWrapWidth: 698,
@@ -77,7 +78,7 @@ export default class Details extends Lightning.Component {
                     text: "Director:",
                     fontFace: "Inter-Bold",
                     fontSize: 18,
-                    textColor: 0xffffffff,
+                    textColor: colors.text,
                   },
                 },
                 Value: {
@@ -85,7 +86,7 @@ export default class Details extends Lightning.Component {
                     text: "",
                     fontFace: "Inter-Regular",
                     fontSize: 18,
-                    textColor: 0xffffffff,
+                    textColor: colors.text,
                   },
                 },
               },
@@ -97,7 +98,7 @@ export default class Details extends Lightning.Component {
                     text: "Cast:",
                     fontFace: "Inter-Bold",
                     fontSize: 18,
-                    textColor: 0xffffffff,
+                    textColor: colors.text,
                   },
                 },
                 Value: {
@@ -105,7 +106,7 @@ export default class Details extends Lightning.Component {
                     text: "",
                     fontFace: "Inter-Regular",
                     fontSize: 18,
-                    textColor: 0xffffffff,
+                    textColor: colors.text,
                     wordWrap: true,
                     wordWrapWidth: 650,
                   },
@@ -223,6 +224,16 @@ export default class Details extends Lightning.Component {
       },
     });
     this._setState("WatchNow");
+  }
+
+  _handleBack() {
+    const history = Router.getHistory();
+
+    if (history.length) {
+      Router.back();
+    } else {
+      Router.navigate("home");
+    }
   }
 
   static _states() {

@@ -1,5 +1,6 @@
 import { Utils, Lightning } from "@lightningjs/sdk";
 import lng from "@lightningjs/core";
+import colors from "../../styles/colors";
 
 export default class LoadingScreenComponent extends Lightning.Component {
   _props = {
@@ -12,7 +13,7 @@ export default class LoadingScreenComponent extends Lightning.Component {
       w: 1920,
       h: 1080,
       rect: true,
-      color: 0xff000000,
+      color: colors.black,
       zIndex: 200,
       Spinner: {
         w: 100,

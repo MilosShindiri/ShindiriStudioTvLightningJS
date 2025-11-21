@@ -1,4 +1,5 @@
 import { Lightning, Img } from "@lightningjs/sdk";
+import colors from "../../styles/colors";
 
 export default class VerticalItem extends Lightning.Component {
   static _template() {
@@ -39,7 +40,7 @@ export default class VerticalItem extends Lightning.Component {
             fontFace: "InterRegular",
             fontSize: 16,
             lineHeight: 20,
-            textColor: 0xffffffff,
+            textColor: colors.text,
           },
         },
       },

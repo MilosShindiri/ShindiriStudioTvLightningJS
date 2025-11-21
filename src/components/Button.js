@@ -1,4 +1,5 @@
 import { Lightning, Router } from "@lightningjs/sdk";
+import colors from "../styles/colors";
 
 export default class Button extends Lightning.Component {
   static _template() {
@@ -23,7 +24,7 @@ export default class Button extends Lightning.Component {
             text: "",
             fontSize: 17,
             fontFace: "Inter-Bold",
-            textColor: 0xffffffff,
+            textColor: colors.text,
             letterSpacing: 2,
             paddingLeft: 5,
           },

@@ -1,4 +1,5 @@
 import { Lightning, Utils, Router } from "@lightningjs/sdk";
+import { SCREEN } from "../constants/dimensions";
 import Content from "../components/Home/Content";
 import TopChannels from "../components/Home/TopChannels";
 import Button from "../components/Home/Button";
@@ -6,12 +7,10 @@ import Button from "../components/Home/Button";
 export default class Home extends Lightning.Component {
   static _template() {
     return {
-      w: 1920,
-      h: 1080,
+      w: SCREEN.w,
+      h: SCREEN.h,
       rect: true,
       Background: {
-        w: 1920,
-        h: 1080,
         src: Utils.asset("images/backgroundImage.png"),
         shader: null,
       },
@@ -50,6 +49,13 @@ export default class Home extends Lightning.Component {
   _init() {
     this._setState("ContentState");
     Router.focusWidget("Menu");
+  }
+
+  _handleBack(e) {
+    if (Router.isNavigating()) {
+      return;
+    }
+    e.preventDefault();
   }
 
   static _states() {

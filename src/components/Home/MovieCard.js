@@ -1,4 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
+import colors from "../../styles/colors";
 import { MovieService } from "../../services/movieService";
 import { Img } from "@lightningjs/sdk";
 
@@ -54,7 +55,7 @@ export default class MovieCard extends Lightning.Component {
     });
     this.tag("Title").patch({
       text: {
-        textColor: 0xffffffff,
+        textColor: colors.white,
       },
     });
   }

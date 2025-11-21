@@ -6,6 +6,7 @@ import { movieService } from "../../services/movieService";
 export default class Content extends Lightning.Component {
   static _template() {
     return {
+      //TODO dodaj flex i gap a ne y
       MoviesRow: { x: 0, y: 0, type: HorizontalContainer },
       SeriesRow: { x: 0, y: 425, type: HorizontalContainer },
     };

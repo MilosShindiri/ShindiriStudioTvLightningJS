@@ -1,10 +1,15 @@
 import { Router, Utils, Lightning, Colors } from "@lightningjs/sdk";
-import setupRouter from "./router.js";
-import colors from "./styles/colors.js";
-import LoadingScreenComponent from "./components/LoadingScreen/LoadingScreenComponent.js";
-import Navbar from "./components/Widgets/Navbar/Navbar.js";
 import "@lightningjs/core/inspector";
+
+import setupRouter from "./router.js";
 import router from "./router";
+import { SCREEN } from "./constants/dimensions";
+
+import colors from "./styles/colors.js";
+
+import Navbar from "./components/Widgets/Navbar/Navbar.js";
+import LoadingScreenComponent from "./components/LoadingScreen/LoadingScreenComponent.js";
+import BRANDING from "./constants/fonts";
 
 export default class App extends Router.App {
   static _template() {
@@ -12,20 +17,17 @@ export default class App extends Router.App {
       ...super._template(),
 
       Background: {
-        w: 1920,
-        h: 1080,
-        src: Utils.asset("images/background.jpg"),
-        zIndex: -1,
+        w: SCREEN.w,
+        h: SCREEN.h,
       },
 
       Pages: {
-        collision: true,
-        w: 1920,
-        h: 1080,
+        // collision: true, ovo ti sluzi za magic remote
+        w: SCREEN.w,
+        h: SCREEN.h,
       },
       Loading: {
         type: LoadingScreenComponent,
-        // alpha: 0,
         visible: false,
         zIndex: 200,
       },
@@ -38,24 +40,11 @@ export default class App extends Router.App {
   }
 
   static getFonts() {
-    return [
-      {
-        family: "InterBold",
-        url: Utils.asset("../static/fonts/Inter_18pt-Bold.ttf"),
-      },
-      {
-        family: "InterSemiBold",
-        url: Utils.asset("../static/fonts/Inter_18pt-SemiBold.ttf"),
-      },
-      {
-        family: "InterRegular",
-        url: Utils.asset("../static/fonts/Inter_18pt-Regular.ttf"),
-      },
-      {
-        family: "Ema",
-        url: Utils.asset("../static/fonts/Inter_28pt-Bold.ttf"),
-      },
-    ];
+    return BRANDING.FONTS.map(({ family, descriptors, path }) => ({
+      family,
+      descriptors,
+      url: Utils.asset(path),
+    }));
   }
 
   _setup() {
@@ -63,10 +52,7 @@ export default class App extends Router.App {
       {
         ...router,
         afterEachRoute: (request) => {
-          console.log("Current route _hash:", request._hash);
-          this.patch({
-            Widgets: { Menu: { props: { route: request._hash } } },
-          });
+          this.Menu.props = { route: request._hash };
         },
       },
       this
@@ -74,35 +60,22 @@ export default class App extends Router.App {
   }
 
   $showLoader() {
-    this.tag("Loading").visible = true;
+    this.Loading.visible = true;
   }
 
   $hideLoader() {
-    this.tag("Loading").visible = false;
+    this.Loading.visible = false;
   }
-
-  // showLoader() {
-  //   this.tag("Loading").setSmooth("alpha", 1);
-  // }
-
-  // hideLoader() {
-  //   this.tag("Loading").setSmooth("alpha", 0);
-  // }
 
   $punchHole() {
     this.tag("Background").shader = {
-      color: Colors("#1F2227").get(),
       type: Lightning.shaders.Hole,
-      x: 0,
-      y: 0,
-      w: 1920,
-      h: 1080,
+      w: SCREEN.w,
+      h: SCREEN.h,
     };
   }
   $unpunchHole() {
     this.tag("Background").shader = {
-      x: 0,
-      y: 0,
       w: 0,
       h: 0,
     };
@@ -111,4 +84,16 @@ export default class App extends Router.App {
   $exitApp() {
     this.application.closeApp();
   }
+
+  get Loading() {
+    return this.tag("Loading");
+  }
+
+  get Menu() {
+    return this.tag("Widgets.Menu");
+  }
 }
+//TODO uradi isto i za Background
+// Dodaj enum za globalne sirine i visine
+// widget treba da ti bude u widgets folderu
+// dodaj enum za pagePaths

@@ -1,4 +1,5 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
+import colors from "../../styles/colors";
 
 export default class Splash extends Lightning.Component {
   static _template() {
@@ -7,7 +8,7 @@ export default class Splash extends Lightning.Component {
         w: 1920,
         h: 1080,
         rect: true,
-        color: 0xff000000,
+        color: colors.black,
         src: Utils.asset("images/backgroundImage.png"),
       },
       Logo: {
@@ -19,13 +20,14 @@ export default class Splash extends Lightning.Component {
         // alpha: 0,
       },
       LoadingText: {
+        //iskoritsti flex za centriranje
         x: 830,
         y: 780,
         text: {
           text: "Loading...",
           fontFace: "InterRegular",
           fontSize: 32,
-          textColor: 0xffffffff,
+          textColor: colors.text,
         },
         // alpha: 0,
       },
@@ -62,7 +64,7 @@ export default class Splash extends Lightning.Component {
   //   nakon što sve završi, idi na Home
   //   Router.navigate("home");
   // }
-
+  //todo iskoristi na jedno mesto
   _simulateLoading() {
     return new Promise((resolve) => {
       setTimeout(() => resolve(), 3000); // 3 sekunde splash
