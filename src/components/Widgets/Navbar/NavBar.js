@@ -1,5 +1,5 @@
 import { Lightning, Router } from "@lightningjs/sdk";
-import NavbarItems from "./NavBarItems";
+import NavbarItems from "./NavbarItems";
 
 export default class Navbar extends Lightning.Component {
   static _template() {
@@ -12,9 +12,9 @@ export default class Navbar extends Lightning.Component {
     return this.tag("Items");
   }
 
+  // Prosleđujemo route ka NavbarItems
   set props(props) {
     const { route } = props;
-    console.log(props);
     if (this.Items) {
       this.Items.props = { route };
     }
@@ -26,6 +26,14 @@ export default class Navbar extends Lightning.Component {
   }
 
   _handleUp() {
+    return true;
+  }
+
+  _handleRight() {
+    return true;
+  }
+
+  _handleLeft() {
     return true;
   }
 

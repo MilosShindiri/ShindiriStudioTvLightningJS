@@ -3,6 +3,11 @@ import { COLORS } from "../../../constants/colors";
 
 export default class NavElement extends Lightning.Component {
   _item = null;
+  _selected = false;
+  _isFocused = false;
+  _labelReady = false;
+  _labelWidth = 0;
+
   static _template() {
     return {
       flexItem: { marginRight: 130 },
@@ -16,9 +21,11 @@ export default class NavElement extends Lightning.Component {
       },
     };
   }
+
   get item() {
     return this._item;
   }
+
   set item(data) {
     this._item = data;
     this.patch({ Label: { text: { text: data.label } } });
@@ -30,18 +37,18 @@ export default class NavElement extends Lightning.Component {
     });
   }
 
+  set selected(val) {
+    this._selected = val;
+    this._applyVisualState();
+  }
+
   set props(props) {
-    console.log(this._item);
     const { route } = props;
-    console.log("Doslo do element zadnji", props);
     if (!route || !this._item) return;
 
     const label = this._item.label;
-    this._selected = route === label.toLowerCase(); // exact match
+    this._selected = route === label.toLowerCase();
     this._applyVisualState();
-    console.log(this._selected);
-    console.log(route);
-    console.log(label);
   }
 
   _focus() {

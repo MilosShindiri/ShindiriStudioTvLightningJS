@@ -34,6 +34,7 @@ export default class NavbarItems extends Lightning.Component {
   }
 
   _init() {
+    // Podaci za navbar
     const navData = [{ label: "HOME" }, { label: "MOVIES" }];
 
     const navItems = navData.map((item) => ({ type: NavElement, item }));
@@ -41,19 +42,27 @@ export default class NavbarItems extends Lightning.Component {
     this.NavItems.props = { items: navItems, h: 49, disableScroll: true };
   }
 
+  // setter props prima route i markira selektovani element
   set props(props) {
     const { route } = props;
-    console.log("NavBarItems Props", props);
     if (!route) return;
-    console.log(this.NavItems);
-    // Make sure children exist
-    // console.log(this.NavItems.children[1]);
-    this.NavItems.Items.children.forEach((navElement) => {
-      console.log(navElement);
-      if (navElement._item) {
-        // normalize to lowercase
-        navElement.props = { route };
-      }
+
+    const index = this.NavItems.Items.children.findIndex(
+      (item) => item._item.label.toLowerCase() === route.toLowerCase()
+    );
+
+    if (index >= 0) {
+      this._setSelected(index);
+    }
+  }
+
+  _setSelected(index) {
+    // HorizontalContainer target
+    this.NavItems.props = { targetIndex: index };
+
+    // Patch-ujemo selektovane elemente
+    this.NavItems.Items.children.forEach((item, i) => {
+      item.selected = i === index;
     });
   }
 

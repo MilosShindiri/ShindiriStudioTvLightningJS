@@ -17,14 +17,12 @@ export default class HorizontalContainer extends Lightning.Component {
       Title: {},
       Items: {
         y: 0,
-        clip: true,
         flex: {
           direction: "row",
         },
       },
     };
   }
-
   get Items() {
     return this.tag("Items");
   }
@@ -68,30 +66,31 @@ export default class HorizontalContainer extends Lightning.Component {
   set props(props) {
     const { items, railTitle, ...rest } = props;
 
-    this._props = { ...this._props, ...rest };
+    // Merge old props with new ones
+    this._props = {
+      ...this._props,
+      ...rest,
+      items: items !== undefined ? items : this._props.items,
+      railTitle: railTitle !== undefined ? railTitle : this._props.railTitle,
+    };
 
     const { cardType, targetIndex } = rest;
 
-    if (railTitle && railTitle !== "") {
-      const { x, h, railFontFace, railFontSize, railLetterSpacing } = rest;
-      //console.log(railFontSize);
-      this.Items.patch({
-        y: 0,
-      });
+    // Handle title and container layout
+    if (this._props.railTitle && this._props.railTitle !== "") {
+      const { h } = rest;
+      this.Items.patch({ y: 0 });
       this.patch({
         h: h + 95,
         Title: {
           x: 0,
-          // x: x,
           y: 0,
-          // h: 55,
+          h: 45,
           text: {
-            text: railTitle,
-            fontFace: railFontFace || "Montserrat-Medium",
-            fontSize: railFontSize || 40,
-            textColor: Colors("#fff").get(),
-            lineHeight: 40,
-            letterSpacing: railLetterSpacing,
+            text: this._props.railTitle,
+            fontFace: "InterBold",
+            fontSize: 24,
+            letterSpacing: 6,
             textTransform: "uppercase",
           },
         },
@@ -101,40 +100,30 @@ export default class HorizontalContainer extends Lightning.Component {
       this.Items.patch({ h: rest.h });
     }
 
-    this.patch({
-      w: this._props.w,
-    });
+    this.patch({ w: this._w });
 
-    if (items !== this._props.items) {
-      this._props.items = items;
-
+    // Only update items if they exist
+    if (this._props.items && this._props.items.length) {
       this.Items.x = 0;
-
       this.Items.childList.clear();
-      if (items?.length > 0) {
-        this.Items.childList.a(items);
-      }
+      this.Items.childList.a(this._props.items);
 
-      if (targetIndex) {
+      if (targetIndex !== undefined) {
         this._setFocusedIndex(targetIndex);
       } else {
-        this._focusedIndex = items?.length > 0 ? 0 : -1;
+        this._focusedIndex = this._props.items.length > 0 ? 0 : -1;
       }
-      // todo: change to paddingLeft
-      if (cardType === "EPG_CARD_ITEM") {
-        this.Items.children[0].patch({
-          flex: {
-            paddingLeft: this._props.paddingLeft,
-          },
-        });
 
-        //todo: check
+      if (cardType === "EPG_CARD_ITEM" && this.Items.children[0]) {
+        this.Items.children[0].patch({
+          flex: { paddingLeft: this._props.paddingLeft },
+        });
         this._scrollPosition = this._props.paddingLeft + this.w || 0;
       }
     }
+
     this.stage.update();
   }
-
   _setScrollPosition(x) {
     this._scrollPosition = x;
     this.Items.smooth = { x: this._scrollPosition };
@@ -177,7 +166,6 @@ export default class HorizontalContainer extends Lightning.Component {
   }
 
   _handleUp() {
-    console.log("handle up");
     return false;
   }
 
@@ -220,7 +208,7 @@ export default class HorizontalContainer extends Lightning.Component {
   }
 
   _handleRight() {
-    //this.Items.children[this._focusedIndex]._unfocus();
+    // this.Items.children[this._focusedIndex]._unfocus();
     const { items } = this._props;
     if (this._focusedIndex < items.length - 1) {
       this.Items.children[this._focusedIndex]._unfocus();
@@ -231,8 +219,6 @@ export default class HorizontalContainer extends Lightning.Component {
         this._focusedIndex,
         this._scrollPosition
       );
-      this.signal("horizontalContainerIndexChange", this._focusedIndex);
-      //console.log("right clicked");
     } else {
       return false;
     }
@@ -240,7 +226,7 @@ export default class HorizontalContainer extends Lightning.Component {
   }
 
   _handleLeft() {
-    //this.Items.children[this._focusedIndex]._unfocus();
+    // this.Items.children[this._focusedIndex]._unfocus();
     if (this._focusedIndex > 0) {
       this.Items.children[this._focusedIndex]?._unfocus();
       this._focusedIndex -= 1;
@@ -250,7 +236,6 @@ export default class HorizontalContainer extends Lightning.Component {
         this._focusedIndex,
         this._scrollPosition
       );
-      this.signal("horizontalContainerIndexChange", this._focusedIndex);
     } else {
       return false;
     }
@@ -258,7 +243,6 @@ export default class HorizontalContainer extends Lightning.Component {
   }
 
   _handleEnter() {
-    //console.log("handled enter");
     const focusedItem = this.Items.children[this._focusedIndex];
     if (focusedItem) {
       focusedItem.signal("select");
