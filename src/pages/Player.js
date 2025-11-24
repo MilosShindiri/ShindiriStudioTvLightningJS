@@ -19,6 +19,10 @@ const buttons = [
   { label: "forward", src: "forward.png" },
 ];
 export default class Player extends Lightning.Component {
+  _controlsVisible = true;
+  _controlsTimeout = null;
+  _isPaused = false;
+
   static _template() {
     return {
       w: SCREEN.w,
@@ -121,9 +125,10 @@ export default class Player extends Lightning.Component {
   }
 
   $videoPlayerPlaying() {
+    this._isPaused = false;
     this._hideSpinner();
+    this._showControls();
   }
-
   $videoPlayerSeeking() {
     if (!this._Spinner.visible) this._Spinner.visible = true;
   }
@@ -189,6 +194,39 @@ export default class Player extends Lightning.Component {
 
   get _EndTime() {
     return this.tag("EndTime.Text");
+  }
+
+  _captureKey() {
+    if (!this._controlsVisible) {
+      this._showControls();
+      return true;
+    }
+
+    // Ako su već vidljive, resetuj timer
+    this._showControls();
+    return false;
+  }
+
+  _showControls() {
+    clearTimeout(this._controlsTimeout);
+    this._controlsVisible = true;
+
+    this.tag("Controller").setSmooth("alpha", 1, { duration: 0.3 });
+    this.tag("BackButton").setSmooth("alpha", 1, { duration: 0.3 });
+
+    // Ako je pauzirano – ne sakrivaj
+    if (this._isPaused) return;
+
+    this._controlsTimeout = setTimeout(() => {
+      this._hideControls();
+    }, 4000);
+  }
+
+  _hideControls() {
+    this._controlsVisible = false;
+
+    this.tag("Controller").setSmooth("alpha", 0, { duration: 0.3 });
+    this.tag("BackButton").setSmooth("alpha", 0, { duration: 0.3 });
   }
 
   _enable() {
