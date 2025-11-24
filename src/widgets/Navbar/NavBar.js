@@ -1,5 +1,5 @@
 import { Lightning, Router } from "@lightningjs/sdk";
-import NavbarItems from "./NavbarItems";
+import NavbarItems from "./NavBarItems";
 
 export default class Navbar extends Lightning.Component {
   static _template() {
@@ -19,7 +19,17 @@ export default class Navbar extends Lightning.Component {
       this.Items.props = { route };
     }
   }
-
+  _handleBack() {
+    const router = Router.getHistory().filter(
+      (history) => history.hash != "splash" && history.hash != "cmp"
+    );
+    if (router.length) {
+      Router.setHistory([...router]);
+      Router.back();
+    } else {
+      Router.navigate("home");
+    }
+  }
   _handleDown() {
     Router.focusPage();
     return true;

@@ -177,6 +177,7 @@ export default class ProgressBar extends Lightning.Component {
     }
 
     if (this._newTime != null) {
+      console.log("fire herere");
       VideoPlayer.seek(this._newTime);
       this._newTime = null;
       // Update UI jednom finalnom _updateProgressBar() da bar prikazuje tačno stanje videa
@@ -202,7 +203,6 @@ export default class ProgressBar extends Lightning.Component {
 
   _handleLeft() {
     clearTimeout(this._singlePressTimeout);
-
     this._singlePressTimeout = setTimeout(() => {
       this._beginSeeking(-5); // dug pritisak → loop unazad
     }, 200); // 200ms threshold za hold

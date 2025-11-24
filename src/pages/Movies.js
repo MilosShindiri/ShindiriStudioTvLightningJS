@@ -36,7 +36,7 @@ export default class Movies extends Lightning.Component {
           Gradient2: {
             w: 1920,
             h: 697,
-            x: 1920 / 3 + 1920 / 4,
+            x: 1120,
             rect: true,
             colorLeft: colors.surfaceSemi,
             colorRight: colors.surfaceTransparent,
@@ -59,7 +59,7 @@ export default class Movies extends Lightning.Component {
               text: {
                 fontFace: "Inter-Regular",
                 fontSize: 22,
-                textColor: colors.text,
+                textColor: 0xffffffff,
                 wordWrap: true,
                 wordWrapWidth: 698,
                 lineHeight: 31,
@@ -86,7 +86,7 @@ export default class Movies extends Lightning.Component {
   get HeroSlideshow() {
     return this.tag("HeroSlideshow");
   }
-
+  // TODO iskoristi iz lodash
   _debounce(func, wait) {
     let timeout;
     return (...args) => {
@@ -118,14 +118,21 @@ export default class Movies extends Lightning.Component {
           MoviesContainer: {
             props: {
               items: props.movies.map((m) => ({
+                //TODO napisi bolju konvenciju
                 type: HorCard,
-                item: { id: m.id, title: m.title, image: m.poster },
+                item: {
+                  id: m.id,
+                  title: m.title,
+                  image: m.poster,
+                  index: m.index,
+                },
                 flexItem: { marginRight: 24 },
               })),
               disableScroll: false,
               // scrollTransition: { duration: 0.8, timingFunction: "ease" },
               w: 1700,
               h: 302,
+              targetIndex: this._currentIndex ?? 0,
             },
           },
         },
@@ -141,7 +148,41 @@ export default class Movies extends Lightning.Component {
     );
   }
 
+  _active() {
+    const history = Router.getHistory();
+
+    // Ako je Movies prva stranica (npr. posle reload-a)
+    if (history.length < 2) {
+      this._currentIndex = 0;
+    } else {
+      const prev = history[history.length - 2]; // stvarno prethodna ruta
+
+      // Ako dolazimo sa HOME → reset na 0
+      if (prev.hash === "home") {
+        this._currentIndex = 0;
+      }
+
+      // Ako dolazimo sa DETAILS → vrati index iz params
+      else if (prev.hash === "details" && prev.params?.index !== undefined) {
+        this._currentIndex = prev.params.index;
+      }
+
+      // Inače ne menjamo index (npr. kada se fokus vraća unutar Movies)
+      else {
+        this._currentIndex = this._currentIndex ?? 0;
+      }
+    }
+
+    // Primeni index
+    this.MoviesContainer.setIndex(this._currentIndex);
+    this.MoviesContainer.scrollToIndex(this._currentIndex);
+
+    this._setState("MoviesContainer");
+  }
+
   _horizontalContainerIndexChange(index) {
+    // diagnostic log: index changed in Movies horizontal container
+    this._currentIndex = index;
     this._debouncedIndexChange(index);
   }
 

@@ -12,12 +12,30 @@ export default class Content extends Lightning.Component {
     };
   }
 
-  async _init() {
-    const movies = await movieService.fetchPopularMovies({ page: 1 });
-    const series = await movieService.fetchPopularMovies({ page: 2 });
+  // async _init() {
+  // If page routing already provided movies/series, `set props` will handle it.
+  // Otherwise, fetch fallback data so component still works standalone.
+  //   if (!this._hasReceivedProps) {
+  //     this._applyData({
+  //       movies: movies.slice(0, 5),
+  //       series: series.slice(0, 5),
+  //     });
+  //   }
+  // }
 
+  // Accept props injected by the router's `on` handler (fetchHomeData sets page.props)
+  set props(props) {
+    // mark that we received routed props so _init fallback won't fetch again
+    this._hasReceivedProps = true;
+    this._applyData(props);
+    this._setState("MoviesState");
+  }
+
+  _applyData({ movies = [], series = [] } = {}) {
     this.tag("MoviesRow").props = {
-      items: movies.slice(0, 5).map((m) => ({ type: MovieCard, movie: m })),
+      items: (movies || [])
+        .slice(0, 5)
+        .map((m) => ({ type: MovieCard, movie: m })),
       railTitle: "MOVIES",
       railFontFace: "Ema",
       railFontSize: 24,
@@ -27,7 +45,9 @@ export default class Content extends Lightning.Component {
     };
 
     this.tag("SeriesRow").props = {
-      items: series.slice(0, 5).map((s) => ({ type: MovieCard, movie: s })),
+      items: (series || [])
+        .slice(0, 5)
+        .map((s) => ({ type: MovieCard, movie: s })),
       railTitle: "SERIES",
       railFontFace: "InterBold",
       railFontSize: 24,
@@ -35,7 +55,6 @@ export default class Content extends Lightning.Component {
       x: 0,
       disableScroll: true,
     };
-    this._setState("MoviesState");
   }
 
   get MoviesRow() {

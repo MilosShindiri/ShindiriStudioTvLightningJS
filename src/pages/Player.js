@@ -21,8 +21,6 @@ const buttons = [
 export default class Player extends Lightning.Component {
   static _template() {
     return {
-      x: 0,
-      y: 0,
       w: SCREEN.w,
       h: SCREEN.h,
       rect: true,
@@ -130,7 +128,7 @@ export default class Player extends Lightning.Component {
     if (!this._Spinner.visible) this._Spinner.visible = true;
   }
   $videoPlayerSeeked() {
-    this._Spinner.visible = false;
+    this._hideSpinner();
   }
 
   $videoPlayerTimeUpdate() {

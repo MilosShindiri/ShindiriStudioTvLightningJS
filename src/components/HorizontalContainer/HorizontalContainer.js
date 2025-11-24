@@ -219,6 +219,7 @@ export default class HorizontalContainer extends Lightning.Component {
         this._focusedIndex,
         this._scrollPosition
       );
+      this.signal("horizontalContainerIndexChange", this._focusedIndex);
     } else {
       return false;
     }
@@ -236,6 +237,7 @@ export default class HorizontalContainer extends Lightning.Component {
         this._focusedIndex,
         this._scrollPosition
       );
+      this.signal("horizontalContainerIndexChange", this._focusedIndex);
     } else {
       return false;
     }
@@ -248,5 +250,13 @@ export default class HorizontalContainer extends Lightning.Component {
       focusedItem.signal("select");
     }
     return true;
+  }
+
+  setIndex(index) {
+    this._setFocusedIndex(index);
+  }
+
+  scrollToIndex(index) {
+    this._setFocusedIndex(index);
   }
 }

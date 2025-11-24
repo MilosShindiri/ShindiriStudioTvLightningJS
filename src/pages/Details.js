@@ -180,6 +180,7 @@ export default class Details extends Lightning.Component {
         },
       },
     });
+    // TODO uradi u jedan patch zbog ...
 
     if (this._detailsData) {
       this._updateUI();
@@ -193,6 +194,7 @@ export default class Details extends Lightning.Component {
     this.tag("Content").patch({
       MetaInfo: {
         text: {
+          // obicno se kreira fja koja vraca result za ovako nesto, a ne direktno u tekst
           text: `${movie.genres.join(", ")}\n${movie.runtime} min\n${
             movie.country
           } • ${movie.releaseYear} • IMDb: ${movie.rating}`,
@@ -227,12 +229,10 @@ export default class Details extends Lightning.Component {
   }
 
   _handleBack() {
-    const history = Router.getHistory();
-
-    if (history.length) {
-      Router.back();
+    if (Router.getHistory().length > 1) {
+      Router.back(); // vraća te na Movies ili odakle si došao
     } else {
-      Router.navigate("home");
+      Router.navigate("home"); // fallback
     }
   }
 
@@ -271,15 +271,7 @@ export default class Details extends Lightning.Component {
         }
 
         _handleEnter() {
-          const router = Router.getHistory().filter(
-            (history) => history.hash != "splash" && history.hash != "cmp"
-          );
-          if (router.length) {
-            Router.setHistory([...router]);
-            Router.back();
-          } else {
-            Router.navigate("home");
-          }
+          this._handleBack();
         }
       },
     ];

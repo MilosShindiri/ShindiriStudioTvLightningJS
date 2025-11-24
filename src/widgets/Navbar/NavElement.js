@@ -1,5 +1,5 @@
 import { Lightning, Router } from "@lightningjs/sdk";
-import { COLORS } from "../../../constants/colors";
+import { COLORS } from "../../constants/colors";
 
 export default class NavElement extends Lightning.Component {
   _item = null;
@@ -89,5 +89,6 @@ export default class NavElement extends Lightning.Component {
   _handleEnter() {
     Router.navigate(this._item.label.toLowerCase());
     return true;
+    // Router.focusPage(); ako zelim da mi bude prvi fokusiran element na strani
   }
 }

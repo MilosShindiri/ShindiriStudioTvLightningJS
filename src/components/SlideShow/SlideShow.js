@@ -23,6 +23,9 @@ export default class Slideshow extends Lightning.Component {
     };
   }
 
+  //todo ispravi logiku da koristis jedan tag u kojem ces da menjas sliku. Takodje obrati paznju na konvenciju naziva
+  // obrati paznju na strukturu
+
   set images(images) {
     this._images = images;
     if (images && images.length > 0) {

@@ -1,5 +1,5 @@
 import { Lightning, Utils, Router } from "@lightningjs/sdk";
-import HorizontalContainer from "../../HorizontalContainer/HorizontalContainer";
+import HorizontalContainer from "../../components/HorizontalContainer/HorizontalContainer";
 import NavElement from "./NavElement";
 
 export default class NavbarItems extends Lightning.Component {

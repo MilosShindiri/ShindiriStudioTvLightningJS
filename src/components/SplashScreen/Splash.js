@@ -1,5 +1,4 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
-import colors from "../../styles/colors";
 
 export default class Splash extends Lightning.Component {
   static _template() {
@@ -8,7 +7,7 @@ export default class Splash extends Lightning.Component {
         w: 1920,
         h: 1080,
         rect: true,
-        color: colors.black,
+        color: 0xff000000,
         src: Utils.asset("images/backgroundImage.png"),
       },
       Logo: {
@@ -27,7 +26,7 @@ export default class Splash extends Lightning.Component {
           text: "Loading...",
           fontFace: "InterRegular",
           fontSize: 32,
-          textColor: colors.text,
+          textColor: 0xffffffff,
         },
         // alpha: 0,
       },

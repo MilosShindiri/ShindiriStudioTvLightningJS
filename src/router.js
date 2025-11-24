@@ -30,6 +30,7 @@ export default {
       path: PAGE_PATHS.DETAILS_PATTERN,
       component: Details,
       on: fetchDetailsData,
+      cache: 0,
     },
     {
       path: PAGE_PATHS.PLAYER,

@@ -3,16 +3,19 @@ import { SCREEN } from "../constants/dimensions";
 import Content from "../components/Home/Content";
 import TopChannels from "../components/Home/TopChannels";
 import Button from "../components/Home/Button";
+import colors from "../styles/colors";
 
 export default class Home extends Lightning.Component {
   static _template() {
     return {
       w: SCREEN.w,
       h: SCREEN.h,
-      rect: true,
+      // rect: true,
+
       Background: {
         src: Utils.asset("images/backgroundImage.png"),
         shader: null,
+        // colors: colors.black,
       },
       Content: {
         x: 64,
@@ -46,9 +49,24 @@ export default class Home extends Lightning.Component {
     return this.tag("Button");
   }
 
+  // forward router-provided props (e.g. movies/series from fetchHomeData) to Content
+  set props(props) {
+    // if Content exists, immediately forward; otherwise store pending
+    if (this.tag("Content")) {
+      this.tag("Content").props = props;
+    } else {
+      this._pendingProps = props;
+    }
+  }
+
   _init() {
     this._setState("ContentState");
     Router.focusWidget("Menu");
+    // apply any props that were set before init
+    if (this._pendingProps && this.tag("Content")) {
+      this.tag("Content").props = this._pendingProps;
+      this._pendingProps = null;
+    }
   }
 
   _handleBack(e) {
@@ -82,11 +100,6 @@ export default class Home extends Lightning.Component {
           this.TopChannels.setSmooth("alpha", 0.6);
           this.Button.setSmooth("alpha", 0.6);
         }
-
-        // _handleUp() {
-        //   Router.focusWidget("Menu");
-        //   return true;
-        // }
 
         _getFocused() {
           return this.Content;

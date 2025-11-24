@@ -1,5 +1,4 @@
 import { Lightning, Img, Router } from "@lightningjs/sdk";
-import colors from "../styles/colors";
 
 export default class HorCard extends Lightning.Component {
   static _template() {
@@ -21,7 +20,7 @@ export default class HorCard extends Lightning.Component {
         text: {
           fontSize: 20,
           fontFace: "InterRegular",
-          textColor: colors.text,
+          textColor: 0xffffffff,
         },
       },
     };
@@ -55,7 +54,10 @@ export default class HorCard extends Lightning.Component {
   }
 
   _handleEnter() {
-    Router.navigate(`details/${this._item.id}`, { movie: this._item });
+    Router.navigate(`details/${this._item.id}`, {
+      movie: this._item,
+      index: this._item.index,
+    });
     console.log(`details/${this._item.id}`, { movie: this._item });
   }
 }
