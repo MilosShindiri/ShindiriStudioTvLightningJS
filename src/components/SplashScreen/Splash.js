@@ -15,7 +15,7 @@ export default class Splash extends Lightning.Component {
         y: 340,
         w: 400,
         h: 400,
-        src: Utils.asset("images/appLogo.png"),
+        src: Utils.asset("images/movie.png"),
         // alpha: 0,
       },
       LoadingText: {

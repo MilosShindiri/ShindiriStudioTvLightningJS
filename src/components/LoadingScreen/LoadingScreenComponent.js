@@ -21,7 +21,7 @@ export default class LoadingScreenComponent extends Lightning.Component {
         x: 960,
         y: 540,
         texture: lng.Tools.getSvgTexture(
-          Utils.asset("../../../static/images/spinner.svg"),
+          Utils.asset("../../../images/spinner.svg"),
           100,
           100
         ),

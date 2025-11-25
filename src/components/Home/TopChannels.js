@@ -41,23 +41,23 @@ export default class TopChannels extends Lightning.Component {
     const topChannels = [
       {
         title: "WeDoTV",
-        image: "../../static/images/channels/wedotv.png",
+        image: "images/channels/wedotv.png",
       },
       {
         title: "Netflix",
-        image: "../../static/images/channels/netflix.png",
+        image: "images/channels/netflix.png",
       },
       {
         title: "Vodafone",
-        image: "../../static/images/channels/vodafone.png",
+        image: "images/channels/vodafone.png",
       },
       {
         title: "Yettel",
-        image: "../../static/images/channels/yettel.png",
+        image: "images/channels/yettel.png",
       },
       {
         title: "TvOne",
-        image: "../../static/images/channels/tvone.png",
+        image: "images/channels/tvone.png",
       },
     ];
 

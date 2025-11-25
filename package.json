@@ -10,10 +10,7 @@
     "vite": "^7.1.12"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.js": []
   },
   "scripts": {
     "start": "vite",

@@ -149,7 +149,7 @@ export default class Details extends Lightning.Component {
       w: 112,
       h: 64,
       props: {
-        icon: Utils.asset("../../static/images/BackButtonIcon.png"),
+        icon: Utils.asset("images/BackButtonIcon.png"),
       },
       Wrapper: {
         w: 112,
@@ -166,7 +166,7 @@ export default class Details extends Lightning.Component {
       h: 78,
       props: {
         label: "WATCH NOW",
-        icon: Utils.asset("../../static/images/WatchNow.png"),
+        icon: Utils.asset("images/WatchNow.png"),
       },
       Wrapper: {
         w: (w) => w,

@@ -15,7 +15,7 @@
     "keys": {}
   },
   "platformSettings": {
-    "path": "./static",
+    "path": "./",
     "log": false,
     "showVersion": false,
     "inspector": true,

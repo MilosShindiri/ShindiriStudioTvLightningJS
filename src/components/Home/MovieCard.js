@@ -15,7 +15,7 @@ export default class MovieCard extends Lightning.Component {
       Image: {
         w: 229,
         h: 300,
-        src: Utils.asset("/static/images/placeholder.png"),
+        src: Utils.asset("/images/placeholder.png"),
         shader: {
           type: Lightning.shaders.RoundedRectangle,
           radius: 8,

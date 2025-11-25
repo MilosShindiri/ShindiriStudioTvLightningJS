@@ -14,7 +14,7 @@ export default class NavbarItems extends Lightning.Component {
         justifyContent: "flex-start",
         alignItems: "center",
       },
-      Logo: { w: 301, h: 44, src: Utils.asset("images/Logo.png") },
+      Logo: { w: 301, h: 44, src: Utils.asset("images/logo.png") },
       NavItems: {
         type: HorizontalContainer,
         x: 80,
