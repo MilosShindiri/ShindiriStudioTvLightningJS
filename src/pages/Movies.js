@@ -50,14 +50,14 @@ export default class Movies extends Lightning.Component {
             Title: {
               flexItem: { marginBottom: 40 },
               text: {
-                fontFace: "Inter-Bold",
+                fontFace: "InterBold",
                 fontSize: 28,
                 textColor: colors.text,
               },
             },
             Info: {
               text: {
-                fontFace: "Inter-Regular",
+                fontFace: "InterRegular",
                 fontSize: 22,
                 textColor: 0xffffffff,
                 wordWrap: true,

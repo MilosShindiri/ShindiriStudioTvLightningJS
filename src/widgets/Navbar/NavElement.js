@@ -14,7 +14,7 @@ export default class NavElement extends Lightning.Component {
       Label: {
         text: {
           fontSize: 24,
-          fontFace: "Inter-Bold",
+          fontFace: "InterBold",
           letterSpacing: 3,
           textColor: COLORS.GRAY,
         },

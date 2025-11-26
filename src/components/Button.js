@@ -23,7 +23,7 @@ export default class Button extends Lightning.Component {
           text: {
             text: "",
             fontSize: 17,
-            fontFace: "Inter-Bold",
+            fontFace: "InterBold",
             textColor: colors.text,
             letterSpacing: 2,
             paddingLeft: 5,

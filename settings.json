@@ -19,6 +19,7 @@
     "log": false,
     "showVersion": false,
     "inspector": true,
+    "usePointer": true,
     "image": {
       "quality": 100
     }

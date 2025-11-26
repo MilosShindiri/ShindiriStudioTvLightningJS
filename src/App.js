@@ -4,6 +4,7 @@ import "@lightningjs/core/inspector";
 import setupRouter from "./router.js";
 import router from "./router";
 import { SCREEN } from "./constants/dimensions";
+import PAGE_PATHS from "./constants/pagePaths.js";
 
 import colors from "./styles/colors.js";
 
@@ -25,7 +26,7 @@ export default class App extends Router.App {
         rect: true,
         w: 1920,
         h: 1080,
-        zIndex: 100000,
+        // zIndex: 100000,
         color: Colors("#000000").get(),
         props: {
           xPos: 960,
@@ -33,7 +34,7 @@ export default class App extends Router.App {
         },
       },
       Pages: {
-        // collision: true, ovo ti sluzi za magic remote
+        collision: true,
         w: SCREEN.w,
         h: SCREEN.h,
       },
@@ -64,6 +65,10 @@ export default class App extends Router.App {
       this
     );
   }
+
+  // _firstEnable() {
+  //   Router.navigate(PAGE_PATHS.SPLASH);
+  // }
 
   $showLoader() {
     this.Loading.visible = true;

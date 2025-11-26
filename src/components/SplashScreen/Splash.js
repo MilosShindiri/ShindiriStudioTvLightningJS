@@ -1,4 +1,5 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
+import PAGE_PATHS from "../../constants/pagePaths.js";
 
 export default class Splash extends Lightning.Component {
   static _template() {
@@ -8,7 +9,7 @@ export default class Splash extends Lightning.Component {
         h: 1080,
         rect: true,
         color: 0xff000000,
-        src: Utils.asset("images/backgroundImage.png"),
+        // src: Utils.asset("images/backgroundImage.png"),
       },
       Logo: {
         x: 760,
@@ -46,15 +47,28 @@ export default class Splash extends Lightning.Component {
     this._fadeInAnimation.start();
   }
 
-  async _active() {
-    console.log("Splash aktiviran");
+  async _firstActive() {
+    console.log("Splash je sada vidljiv! Pokrećem timer.");
 
-    // Simulira učitavanje 3 sekunde
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // sada kreće TVOJ splash timer
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
-    console.log("Prelazak na Home ekran...");
-    Router.navigate("home");
+    console.log("Splash gotov, idem na Home");
+    Router.navigate(PAGE_PATHS.HOME);
   }
+
+  // _firstActive() {
+  // mali delay da LG loader nestane
+  //   setTimeout(() => {
+  //     console.log("Pokrećem splash timer...");
+
+  // splash traje 9 sekundi
+  //     setTimeout(() => {
+  //       console.log("Splash gotov, prelazim na Home");
+  //       Router.navigate(PAGE_PATHS.HOME);
+  //     }, 9000);
+  //   }, 100); // 100ms delay
+  // }
 
   // async _active() {
   //   simulacija inicijalnog fetcha (npr. učitavanje podataka ili fontova)
@@ -64,11 +78,11 @@ export default class Splash extends Lightning.Component {
   //   Router.navigate("home");
   // }
   //todo iskoristi na jedno mesto
-  _simulateLoading() {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(), 3000); // 3 sekunde splash
-    });
-  }
+  // _simulateLoading() {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => resolve(), 9000); // 3 sekunde splash
+  //   });
+  // }
 
   _disable() {
     // čišćenje animacija

@@ -23,7 +23,7 @@ export default class Details extends Lightning.Component {
           y: 108,
           text: {
             text: "",
-            fontFace: "Inter-Regular",
+            fontFace: "InterRegular",
             fontSize: 20,
             textColor: colors.text,
             lineHeight: 28,
@@ -48,7 +48,7 @@ export default class Details extends Lightning.Component {
               flexItem: { marginBottom: 20 },
               text: {
                 text: "",
-                fontFace: "Inter-Bold",
+                fontFace: "InterBold",
                 fontSize: 28,
                 textColor: colors.text,
               },
@@ -57,7 +57,7 @@ export default class Details extends Lightning.Component {
               flexItem: { marginBottom: 20 },
               text: {
                 text: "",
-                fontFace: "Inter-Regular",
+                fontFace: "InterRegular",
                 fontSize: 18,
                 textColor: colors.text,
                 lineHeight: 26,
@@ -76,7 +76,7 @@ export default class Details extends Lightning.Component {
                   flexItem: { marginRight: 8 },
                   text: {
                     text: "Director:",
-                    fontFace: "Inter-Bold",
+                    fontFace: "InterBold",
                     fontSize: 18,
                     textColor: colors.text,
                   },
@@ -84,7 +84,7 @@ export default class Details extends Lightning.Component {
                 Value: {
                   text: {
                     text: "",
-                    fontFace: "Inter-Regular",
+                    fontFace: "InterRegular",
                     fontSize: 18,
                     textColor: colors.text,
                   },
@@ -96,7 +96,7 @@ export default class Details extends Lightning.Component {
                   flexItem: { marginRight: 8 },
                   text: {
                     text: "Cast:",
-                    fontFace: "Inter-Bold",
+                    fontFace: "InterBold",
                     fontSize: 18,
                     textColor: colors.text,
                   },
@@ -104,7 +104,7 @@ export default class Details extends Lightning.Component {
                 Value: {
                   text: {
                     text: "",
-                    fontFace: "Inter-Regular",
+                    fontFace: "InterRegular",
                     fontSize: 18,
                     textColor: colors.text,
                     wordWrap: true,
