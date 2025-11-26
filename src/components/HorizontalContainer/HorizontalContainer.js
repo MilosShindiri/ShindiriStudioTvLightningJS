@@ -13,9 +13,12 @@ export default class HorizontalContainer extends Lightning.Component {
 
   static _template() {
     return {
+      collision: true,
       flex: { direction: "row", wrap: true },
       Title: {},
       Items: {
+        collision: true,
+
         y: 0,
         flex: {
           direction: "row",

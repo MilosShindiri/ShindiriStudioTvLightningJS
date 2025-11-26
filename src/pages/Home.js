@@ -18,6 +18,7 @@ export default class Home extends Lightning.Component {
         // colors: colors.black,
       },
       Content: {
+        collision: true,
         x: 64,
         y: 125,
         w: 1241,
@@ -74,6 +75,20 @@ export default class Home extends Lightning.Component {
       return;
     }
     e.preventDefault();
+
+    this.fireAncestors("$appClose");
+  }
+
+  $setStateOnScroll(nextState) {
+    this._setState(nextState);
+  }
+
+  $handleStateHover(index, stateName = null) {
+    if (stateName) {
+      this._setState(stateName);
+      return;
+    }
+    this._setState(states[index]);
   }
 
   static _states() {

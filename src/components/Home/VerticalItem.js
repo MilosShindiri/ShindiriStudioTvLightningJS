@@ -63,6 +63,17 @@ export default class VerticalItem extends Lightning.Component {
       },
     });
   }
+  _handleHover() {
+    this._focus();
+  }
+
+  _handleUnhover() {
+    this._unfocus();
+  }
+
+  _handleClick() {
+    this._handleEnter();
+  }
 
   _focus() {
     this.patch({

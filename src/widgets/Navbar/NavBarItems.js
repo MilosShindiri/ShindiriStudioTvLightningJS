@@ -16,6 +16,7 @@ export default class NavbarItems extends Lightning.Component {
       },
       Logo: { w: 301, h: 44, src: Utils.asset("images/logo.png") },
       NavItems: {
+        collision: true,
         type: HorizontalContainer,
         x: 80,
         w: 674,

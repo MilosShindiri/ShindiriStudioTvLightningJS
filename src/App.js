@@ -11,6 +11,7 @@ import colors from "./styles/colors.js";
 import Navbar from "./widgets/Navbar/NavBar.js";
 import LoadingScreenComponent from "./components/LoadingScreen/LoadingScreenComponent.js";
 import BRANDING from "./constants/fonts";
+import { getDevice } from "./utils/device.js";
 
 export default class App extends Router.App {
   static _template() {
@@ -94,6 +95,39 @@ export default class App extends Router.App {
 
   $exitApp() {
     this.application.closeApp();
+  }
+
+  $appClose() {
+    const dialog = this._Dialog;
+    dialog.open({
+      message: t("exit_label"),
+      actions: [
+        {
+          label: t("no_resume"),
+          action: () => {
+            dialog.close();
+          },
+        },
+        {
+          label: t("yes_exit"),
+          action: () => {
+            const device = getDevice();
+            // Router navigation for "Yes, exit now"
+            switch (device) {
+              case "metrological":
+                this.application.closeApp();
+                break;
+              case "tizen":
+                window.tizen.application.getCurrentApplication().exit();
+                break;
+              default:
+                window.close();
+                break;
+            }
+          },
+        },
+      ],
+    });
   }
 
   get Loading() {

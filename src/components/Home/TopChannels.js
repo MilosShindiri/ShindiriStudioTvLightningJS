@@ -28,6 +28,7 @@ export default class TopChannels extends Lightning.Component {
         },
 
         Channels: {
+          collision: true,
           type: VerticalContainer,
           enableScroll: false,
           w: 280,
@@ -62,6 +63,7 @@ export default class TopChannels extends Lightning.Component {
     ];
 
     const channelCards = topChannels.map((channel) => ({
+      collision: true,
       type: VerticalItem,
       itemData: channel,
     }));

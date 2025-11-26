@@ -3,6 +3,7 @@ import { Lightning, Img, Router } from "@lightningjs/sdk";
 export default class HorCard extends Lightning.Component {
   static _template() {
     return {
+      collision: true,
       w: 440,
       h: 330,
       color: 0xff222222,
@@ -36,6 +37,18 @@ export default class HorCard extends Lightning.Component {
     }
 
     this.tag("Title").text.text = data.title;
+  }
+
+  _handleClick() {
+    this._handleEnter();
+  }
+
+  _handleHover() {
+    this._focus();
+  }
+
+  _handleUnhover() {
+    this._unfocus();
   }
 
   _focus() {

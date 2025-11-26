@@ -6,6 +6,7 @@ import { Img } from "@lightningjs/sdk";
 export default class MovieCard extends Lightning.Component {
   static _template() {
     return {
+      collision: true,
       rect: true,
       flex: { direction: "column", paddingRight: 24 },
       // flexItem: { marginLeft: 0 },
@@ -73,5 +74,17 @@ export default class MovieCard extends Lightning.Component {
         textColor: 0x99ffffff,
       },
     });
+  }
+
+  _handleHover() {
+    this._focus();
+  }
+
+  _handleUnhover() {
+    this._unfocus();
+  }
+
+  _handleClick() {
+    this._handleEnter();
   }
 }

@@ -7,8 +7,8 @@ export default class Content extends Lightning.Component {
   static _template() {
     return {
       //TODO dodaj flex i gap a ne y
-      MoviesRow: { x: 0, y: 0, type: HorizontalContainer },
-      SeriesRow: { x: 0, y: 425, type: HorizontalContainer },
+      MoviesRow: { x: 0, y: 0, collision: true, type: HorizontalContainer },
+      SeriesRow: { x: 0, y: 425, collision: true, type: HorizontalContainer },
     };
   }
 
@@ -65,6 +65,10 @@ export default class Content extends Lightning.Component {
     return this.tag("SeriesRow");
   }
 
+  // vidi da li ovo ide ovde ili na home page
+  _handleHover() {
+    Router.focusPage();
+  }
   static _states() {
     return [
       class MoviesState extends this {
