@@ -78,10 +78,7 @@ export default class MovieCard extends Lightning.Component {
 
   _handleHover() {
     this._focus();
-  }
-
-  _handleUnhover() {
-    this._unfocus();
+    this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
   }
 
   _handleClick() {

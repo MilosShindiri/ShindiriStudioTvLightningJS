@@ -76,4 +76,8 @@ export default class TopChannels extends Lightning.Component {
   _getFocused() {
     return this.tag("Channels");
   }
+
+  _handleHover() {
+    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+  }
 }

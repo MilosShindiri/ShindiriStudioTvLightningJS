@@ -28,7 +28,7 @@ export default class Content extends Lightning.Component {
     // mark that we received routed props so _init fallback won't fetch again
     this._hasReceivedProps = true;
     this._applyData(props);
-    this._setState("MoviesState");
+    this._setState("MoviesRow");
   }
 
   _applyData({ movies = [], series = [] } = {}) {
@@ -65,13 +65,23 @@ export default class Content extends Lightning.Component {
     return this.tag("SeriesRow");
   }
 
-  // vidi da li ovo ide ovde ili na home page
-  _handleHover() {
-    Router.focusPage();
+  $handleHoverState(ref) {
+    const currentState = this._getState();
+    // console.log("WSTV", ref);
+
+    if (ref !== currentState) {
+      if (currentState) this.tag(currentState)._unfocus();
+      this._setState(ref);
+    }
   }
+
+  _handleHover() {
+    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+  }
+
   static _states() {
     return [
-      class MoviesState extends this {
+      class MoviesRow extends this {
         $enter() {
           this.MoviesRow.setSmooth("alpha", 1);
           this.SeriesRow.setSmooth("alpha", 0.6);
@@ -87,12 +97,12 @@ export default class Content extends Lightning.Component {
         }
 
         _handleDown() {
-          this._setState("SeriesState");
+          this._setState("SeriesRow");
           return true;
         }
       },
 
-      class SeriesState extends this {
+      class SeriesRow extends this {
         $enter() {
           this.MoviesRow.setSmooth("alpha", 0.6);
           this.SeriesRow.setSmooth("alpha", 1);
@@ -103,7 +113,7 @@ export default class Content extends Lightning.Component {
         }
 
         _handleUp() {
-          this._setState("MoviesState");
+          this._setState("MoviesRow");
           return true;
         }
       },

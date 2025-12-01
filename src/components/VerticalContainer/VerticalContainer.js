@@ -184,6 +184,21 @@ export default class VerticalContainer extends Lightning.Component {
   }
 
   _unfocus() {
+    this.Items.children[this._focusedIndex]?._unfocus();
+  }
+
+  $handleItemHover(index) {
+    if (this._focusedIndex !== index) {
+      this.Items.children[this._focusedIndex]?._unfocus();
+      this._focusedIndex = index;
+    }
+    this._reCalibrateScroll();
+
+    // pošalji svoje ime (MoviesRow ili SeriesRow)
+    this.fireAncestors("$handleStateHover", this.ref);
+  }
+
+  _unfocus() {
     const { items } = this._props;
     if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
       this.Items.children[this._focusedIndex]?._unfocus();

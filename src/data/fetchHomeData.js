@@ -31,8 +31,6 @@ import { movieService } from "../services/movieService.js";
 import MovieCard from "../components/Home/MovieCard.js";
 
 export default async function fetchHomeData(page) {
-  console.log("[Router] Fetching data for Home page...");
-
   try {
     const [movies, series] = await Promise.all([
       movieService.fetchPopularMovies({ page: 1 }),

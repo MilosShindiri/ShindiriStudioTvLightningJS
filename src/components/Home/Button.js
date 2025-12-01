@@ -28,6 +28,25 @@ export default class Button extends Lightning.Component {
     };
   }
 
+  // $handleHoverState(ref) {
+  //   const currentState = this._getState();
+  //   // console.log("WSTV", ref);
+
+  //   if (ref !== currentState) {
+  //     if (currentState) this.tag(currentState)._unfocus();
+  //     this._setState(ref);
+  //   }
+  // }
+
+  _handleHover() {
+    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+  }
+
+  // _handleHover() {
+  //   this._focus();
+  //   this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
+  // }
+
   _focus() {
     this.patch({
       color: 0xffed1c24,

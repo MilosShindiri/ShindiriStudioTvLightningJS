@@ -177,7 +177,6 @@ export default class ProgressBar extends Lightning.Component {
     }
 
     if (this._newTime != null) {
-      console.log("fire herere");
       VideoPlayer.seek(this._newTime);
       this._newTime = null;
       // Update UI jednom finalnom _updateProgressBar() da bar prikazuje tačno stanje videa

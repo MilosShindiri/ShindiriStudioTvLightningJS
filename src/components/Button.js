@@ -73,6 +73,14 @@ export default class Button extends Lightning.Component {
     }
   }
 
+  _handleHover() {
+    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+  }
+
+  _handleUnhover() {
+    // this._unfocus();
+  }
+
   _focus() {
     this.patch({
       smooth: { color: this._focusedColor, scale: 1.05 },

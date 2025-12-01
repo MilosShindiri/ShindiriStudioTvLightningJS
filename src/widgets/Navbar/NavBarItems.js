@@ -57,6 +57,27 @@ export default class NavbarItems extends Lightning.Component {
     }
   }
 
+  // $handleHoverIndex(index) {
+  //   if (index === undefined || index === null) return;
+
+  //   // Ako već postoji prethodni fokusirani element, unfocus-uj ga
+  //   if (this._currentIndex !== undefined && this._currentIndex !== index) {
+  //     const prevItem = this.NavItems.Items.children[this._currentIndex];
+  //     if (prevItem) prevItem._unfocus();
+  //   }
+
+  //   // Fokusiraj novi element
+  //   const newItem = this.NavItems.Items.children[index];
+  //   if (newItem) newItem._focus();
+
+  //   // Sačuvaj trenutno fokusirani index
+  //   this._currentIndex = index;
+  // }
+
+  // _handleHover() {
+  //   this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+  // }
+
   _setSelected(index) {
     // HorizontalContainer target
     this.NavItems.props = { targetIndex: index };

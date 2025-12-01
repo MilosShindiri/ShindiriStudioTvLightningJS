@@ -10,8 +10,10 @@ export default class NavElement extends Lightning.Component {
 
   static _template() {
     return {
-      flexItem: { marginRight: 130 },
+      collision: true, // Omogućava hover/klik
+      h: 20, // Fiksna visina
       Label: {
+        // y: 18, // Centriraj tekst vertikalno
         text: {
           fontSize: 24,
           fontFace: "InterBold",
@@ -22,17 +24,16 @@ export default class NavElement extends Lightning.Component {
     };
   }
 
-  get item() {
-    return this._item;
-  }
-
   set item(data) {
     this._item = data;
-    this.patch({ Label: { text: { text: data.label } } });
+    this.tag("Label").text = data.label;
 
     this.tag("Label").once("txLoaded", () => {
       this._labelWidth = this.tag("Label").renderWidth;
       this._labelReady = true;
+
+      // Dinamički postavljamo širinu komponenti na osnovu teksta + padding
+      this.w = this._labelWidth + 40; // 20px padding levo/desno
       this._applyVisualState();
     });
   }
@@ -49,6 +50,31 @@ export default class NavElement extends Lightning.Component {
     const label = this._item.label;
     this._selected = route === label.toLowerCase();
     this._applyVisualState();
+  }
+
+  _handleHover() {
+    this._focus();
+    this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
+    Router.focusWidget("Menu");
+  }
+
+  // _handleHover() {
+  //   this._focus();
+  //   this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
+  //   console.log(this.parent.children.indexOf(this));
+  // }
+
+  // _handleHover() {
+  //   const index = this.parent.children.indexOf(this);
+  //   this.fireAncestors("$handleHoverIndex", index);
+  // }
+
+  _handleUnhover() {
+    Router.focusPage();
+  }
+
+  _handleClick() {
+    this._handleEnter();
   }
 
   _focus() {
@@ -89,6 +115,5 @@ export default class NavElement extends Lightning.Component {
   _handleEnter() {
     Router.navigate(this._item.label.toLowerCase());
     return true;
-    // Router.focusPage(); ako zelim da mi bude prvi fokusiran element na strani
   }
 }

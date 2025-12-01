@@ -33,6 +33,7 @@ export default class Home extends Lightning.Component {
       Button: {
         x: 64,
         y: 971,
+        collision: true,
         type: Button,
       },
     };
@@ -61,8 +62,8 @@ export default class Home extends Lightning.Component {
   }
 
   _init() {
-    this._setState("ContentState");
-    Router.focusWidget("Menu");
+    this._setState("Content");
+    // Router.focusWidget("Menu");
     // apply any props that were set before init
     if (this._pendingProps && this.tag("Content")) {
       this.tag("Content").props = this._pendingProps;
@@ -78,22 +79,33 @@ export default class Home extends Lightning.Component {
 
     this.fireAncestors("$appClose");
   }
+  // _handleHover() {
+  //   Router.focusPage();
+  // }
+  // $setStateOnScroll(nextState) {
+  //   this._setState(nextState);
+  // }
 
-  $setStateOnScroll(nextState) {
-    this._setState(nextState);
-  }
+  $handleHoverState(ref) {
+    const currentState = this._getState();
 
-  $handleStateHover(index, stateName = null) {
-    if (stateName) {
-      this._setState(stateName);
-      return;
+    if (ref !== currentState) {
+      if (currentState) this.tag(currentState)._unfocus();
+      this._setState(ref);
     }
-    this._setState(states[index]);
   }
+
+  _captureKey() {
+    // console.log("key pressed", this._getState());
+    return false;
+  }
+
+  //   // ako želiš da koristiš currentState
+  // }
 
   static _states() {
     return [
-      class ButtonState extends this {
+      class Button extends this {
         $enter() {
           this.Button.setSmooth("alpha", 1);
           this.Content.setSmooth("alpha", 0.6);
@@ -109,7 +121,7 @@ export default class Home extends Lightning.Component {
           return true;
         }
       },
-      class ContentState extends this {
+      class Content extends this {
         $enter() {
           this.Content.setSmooth("alpha", 1);
           this.TopChannels.setSmooth("alpha", 0.6);
@@ -119,22 +131,23 @@ export default class Home extends Lightning.Component {
         _getFocused() {
           return this.Content;
         }
+
         _handleUp() {
           Router.focusWidget("Menu");
           return true;
         }
         _handleRight() {
-          this._setState("TopChannelsState");
+          this._setState("TopChannels");
           return true;
         }
 
-        _handleDown() {
-          this._setState("ButtonState");
-          return true;
-        }
+        // _handleDown() {
+        //   this._setState("ButtonState");
+        //   return true;
+        // }
       },
 
-      class TopChannelsState extends this {
+      class TopChannels extends this {
         $enter() {
           this.Content.setSmooth("alpha", 0.6);
           this.Button.setSmooth("alpha", 0.6);
@@ -146,7 +159,8 @@ export default class Home extends Lightning.Component {
         }
 
         _handleLeft() {
-          this._setState("ContentState");
+          console.log("WSTV DADA");
+          this._setState("Content");
           return true;
         }
       },

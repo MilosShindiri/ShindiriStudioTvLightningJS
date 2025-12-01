@@ -45,6 +45,7 @@ export default class HorCard extends Lightning.Component {
 
   _handleHover() {
     this._focus();
+    this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
   }
 
   _handleUnhover() {
@@ -71,6 +72,5 @@ export default class HorCard extends Lightning.Component {
       movie: this._item,
       index: this._item.index,
     });
-    console.log(`details/${this._item.id}`, { movie: this._item });
   }
 }

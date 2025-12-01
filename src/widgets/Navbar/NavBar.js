@@ -4,7 +4,7 @@ import NavbarItems from "./NavBarItems";
 export default class Navbar extends Lightning.Component {
   static _template() {
     return {
-      Items: { type: NavbarItems, x: 32, y: 32 },
+      Items: { type: NavbarItems, x: 32, y: 32, collision: true },
     };
   }
 
@@ -30,6 +30,7 @@ export default class Navbar extends Lightning.Component {
       Router.navigate("home");
     }
   }
+
   _handleDown() {
     Router.focusPage();
     return true;

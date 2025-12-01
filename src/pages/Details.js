@@ -17,6 +17,7 @@ export default class Details extends Lightning.Component {
         y: 65,
         x: 69,
         BackButton: {
+          collision: true,
           type: Button,
         },
         MetaInfo: {
@@ -114,6 +115,7 @@ export default class Details extends Lightning.Component {
               },
             },
             WatchNow: {
+              collision: true,
               type: Button,
             },
           },
@@ -135,8 +137,6 @@ export default class Details extends Lightning.Component {
   }
 
   set props(props) {
-    console.log("Received props:", props);
-
     this._detailsData = props;
 
     if (this.tag("Content.MetaInfo")) {
@@ -228,12 +228,37 @@ export default class Details extends Lightning.Component {
     this._setState("WatchNow");
   }
 
+  // _firstActive() {
+  //   this._setState("WatchNow");
+  // }
+
+  _handleClick() {
+    const current = this.state;
+    if (current === "WatchNow") {
+      Router.navigate("player");
+    } else if (current === "BackButton") {
+      this._handleBack();
+    }
+  }
+
   _handleBack() {
     if (Router.getHistory().length > 1) {
       Router.back(); // vraća te na Movies ili odakle si došao
     } else {
       Router.navigate("home"); // fallback
     }
+  }
+
+  $handleHoverState(ref) {
+    const currentState = this._getState();
+
+    console.log("Details hover state:", ref, currentState);
+
+    if (ref !== currentState) {
+      if (currentState) this.tag(currentState)._unfocus();
+      this._setState(ref);
+    }
+    console.log("Evo ga ce this", this);
   }
 
   static _states() {

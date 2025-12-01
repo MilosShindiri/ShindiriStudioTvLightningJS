@@ -5,9 +5,6 @@ export default async function fetchMoviesData(page) {
 
   try {
     const movies = await movieService.fetchPopularMovies({ page: 1 });
-
-    console.log("Movies", movies);
-
     const formatted = movies.map((m) => ({
       title: m.title,
       description: m.description,
