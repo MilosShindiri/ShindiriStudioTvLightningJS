@@ -6,6 +6,10 @@ import { movieService } from "../../services/movieService";
 export default class Content extends Lightning.Component {
   static _template() {
     return {
+      // rect: true,
+      // color: 0xff000000,
+      // w: 1241,
+      // h: 837,
       //TODO dodaj flex i gap a ne y
       MoviesRow: { x: 0, y: 0, collision: true, type: HorizontalContainer },
       SeriesRow: { x: 0, y: 425, collision: true, type: HorizontalContainer },
@@ -73,11 +77,10 @@ export default class Content extends Lightning.Component {
       if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
     }
-  }
-
-  _handleHover() {
     this.fireAncestors("$handleHoverState", this.ref); //sending ref name
   }
+
+  _handleHover() {}
 
   static _states() {
     return [

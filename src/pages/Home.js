@@ -88,17 +88,18 @@ export default class Home extends Lightning.Component {
 
   $handleHoverState(ref) {
     const currentState = this._getState();
-
+    console.warn("WSTV handle", ref !== currentState);
+    console.log(currentState);
     if (ref !== currentState) {
       if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
     }
   }
 
-  _captureKey() {
-    // console.log("key pressed", this._getState());
-    return false;
-  }
+  // _captureKey() {
+  //   // console.log("key pressed", this._getState());
+  //   return false;
+  // }
 
   //   // ako želiš da koristiš currentState
   // }
@@ -159,7 +160,6 @@ export default class Home extends Lightning.Component {
         }
 
         _handleLeft() {
-          console.log("WSTV DADA");
           this._setState("Content");
           return true;
         }

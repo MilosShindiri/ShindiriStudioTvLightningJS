@@ -176,16 +176,12 @@ export default class VerticalContainer extends Lightning.Component {
     return false;
   }
 
-  _focus() {
-    const { items } = this._props;
-    if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
-      this.Items.children[this._focusedIndex]?._focus();
-    }
-  }
-
-  _unfocus() {
-    this.Items.children[this._focusedIndex]?._unfocus();
-  }
+  // _focus() {
+  //   const { items } = this._props;
+  //   if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
+  //     this.Items.children[this._focusedIndex]?._focus();
+  //   }
+  // }
 
   $handleItemHover(index) {
     if (this._focusedIndex !== index) {
@@ -199,11 +195,15 @@ export default class VerticalContainer extends Lightning.Component {
   }
 
   _unfocus() {
-    const { items } = this._props;
-    if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
-      this.Items.children[this._focusedIndex]?._unfocus();
-    }
+    this.Items.children[this._focusedIndex]?._unfocus();
   }
+
+  // _unfocus() {
+  //   const { items } = this._props;
+  //   if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
+  //     this.Items.children[this._focusedIndex]?._unfocus();
+  //   }
+  // }
 
   _appendItems(items) {
     items?.forEach((item) => {
