@@ -123,7 +123,7 @@ export default class ProgressBar extends Lightning.Component {
   // requestAnimationFrame: ponovo poziva _startSeekLoop() na sljedećem frame-u
   // Ovde nastaje kontinuirana petlja dok korisnik drži dugme.
   _startSeekLoop() {
-    console.warn("WSTV", this._newTime);
+    // console.warn("WSTV", this._newTime);
 
     if (!this._seeking) return;
 

@@ -54,6 +54,7 @@ export default class Button extends Lightning.Component {
   }
 
   _unfocus() {
+    console.warn("asdasdasd");
     this.patch({
       color: 0xff2f2f2f,
     });

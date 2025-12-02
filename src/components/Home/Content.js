@@ -70,6 +70,11 @@ export default class Content extends Lightning.Component {
   }
 
   $handleHoverState(ref) {
+    console.log("%c[CONTENT] HOVER FROM CHILD", "color: cyan", {
+      ref,
+      contentState: this._getState(),
+      stageFocus: this.stage.focus,
+    });
     const currentState = this._getState();
     // console.log("WSTV", ref);
 

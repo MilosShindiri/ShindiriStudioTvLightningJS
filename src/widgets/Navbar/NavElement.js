@@ -53,6 +53,11 @@ export default class NavElement extends Lightning.Component {
   }
 
   _handleHover() {
+    console.log("%c[NAV ELEMENT] HOVER", "color: #33ccff", {
+      label: this._item?.label,
+    });
+
+    console.log("%c[NAV ELEMENT] FORCING WIDGET FOCUS", "color: #ff3399");
     this._focus();
     this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
     Router.focusWidget("Menu");
@@ -70,6 +75,8 @@ export default class NavElement extends Lightning.Component {
   // }
 
   _handleUnhover() {
+    console.log("%c[NAV ELEMENT] UNHOVER", "color: gray");
+
     Router.focusPage();
   }
 
@@ -84,6 +91,7 @@ export default class NavElement extends Lightning.Component {
 
   _unfocus() {
     this._isFocused = false;
+    console.log("asdf");
     this._applyVisualState();
   }
 

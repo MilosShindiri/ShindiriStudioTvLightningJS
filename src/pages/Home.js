@@ -87,14 +87,26 @@ export default class Home extends Lightning.Component {
   // }
 
   $handleHoverState(ref) {
-    console.log(ref);
+    if (Router.getActiveWidget()) {
+      Router.focusPage();
+    }
     const currentState = this._getState();
-    console.warn("WSTV handle", ref !== currentState);
+
     if (ref !== currentState) {
-      if (currentState) this.tag(currentState)._unfocus();
+      if (currentState) {
+        console.log("asdf curState: ", currentState);
+        // this.tag(currentState)._unfocus();
+      }
+
+      console.log("asdf ref: ", ref);
+
       this._setState(ref);
     }
   }
+
+  // _handleUnhover() {
+  //   Router.focusWidget("Menu");
+  // }
 
   // _captureKey() {
   //   // console.log("key pressed", this._getState());
@@ -104,10 +116,18 @@ export default class Home extends Lightning.Component {
   //   // ako želiš da koristiš currentState
   // }
 
+  _getFocused() {
+    console.log("%c[HOME] _getFocused CALLED", "color: magenta", {
+      focusPath: this.stage?.focusPath,
+    });
+    return this[this._getState()];
+  }
+
   static _states() {
     return [
       class Button extends this {
         $enter() {
+          console.log("%c[HOME] ENTER STATE:", "color: green", "Content");
           this.Button.setSmooth("alpha", 1);
           this.Content.setSmooth("alpha", 0.6);
           this.TopChannels.setSmooth("alpha", 0.6);
@@ -124,6 +144,7 @@ export default class Home extends Lightning.Component {
       },
       class Content extends this {
         $enter() {
+          console.log("%c[HOME] ENTER STATE:", "color: green", "Content");
           this.Content.setSmooth("alpha", 1);
           this.TopChannels.setSmooth("alpha", 0.6);
           this.Button.setSmooth("alpha", 0.6);
@@ -137,6 +158,7 @@ export default class Home extends Lightning.Component {
           Router.focusWidget("Menu");
           return true;
         }
+
         _handleRight() {
           this._setState("TopChannels");
           return true;
@@ -150,6 +172,7 @@ export default class Home extends Lightning.Component {
 
       class TopChannels extends this {
         $enter() {
+          console.log("%c[HOME] ENTER STATE:", "color: green", "Content");
           this.Content.setSmooth("alpha", 0.6);
           this.Button.setSmooth("alpha", 0.6);
           this.TopChannels.setSmooth("alpha", 1);

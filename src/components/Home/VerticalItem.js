@@ -65,7 +65,7 @@ export default class VerticalItem extends Lightning.Component {
   }
 
   _handleHover() {
-    console.log("dadada");
+    // console.log("dadada");
     this._focus();
     this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
   }

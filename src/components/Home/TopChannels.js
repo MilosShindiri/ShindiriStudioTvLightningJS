@@ -8,14 +8,14 @@ export default class TopChannels extends Lightning.Component {
     return {
       rect: true,
       color: colors.black,
-      // w: 312,
+      w: 312,
       h: 837,
       shader: { type: Lightning.shaders.RoundedRectangle, radius: 16 },
 
       Padding: {
         x: 16,
         y: 24,
-        // w: 280, // 312 - (16 + 16)
+        w: 280, // 312 - (16 + 16)
         h: 789, // 837 - (24 + 24)
         flex: { direction: "column", alignItems: "center" },
 
@@ -82,7 +82,7 @@ export default class TopChannels extends Lightning.Component {
     // console.log("WSTV", ref);
 
     if (ref !== currentState) {
-      if (currentState) this.tag(currentState)._unfocus();
+      // if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
     }
     this.fireAncestors("$handleHoverState", this.ref); //sending ref name

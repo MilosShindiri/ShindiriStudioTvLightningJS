@@ -25,7 +25,21 @@ export default class NavbarItems extends Lightning.Component {
       },
     };
   }
+  $handleHoverState(ref) {
+    console.log("%c[CONTENT] HOVER FROM CHILD", "color: cyan", {
+      ref,
+      contentState: this._getState(),
+      stageFocus: this.stage.focus,
+    });
+    const currentState = this._getState();
+    // console.log("WSTV", ref);
 
+    if (ref !== currentState) {
+      if (currentState) this.tag(currentState)._unfocus();
+      this._setState(ref);
+    }
+    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+  }
   get NavItems() {
     return this.tag("NavItems");
   }

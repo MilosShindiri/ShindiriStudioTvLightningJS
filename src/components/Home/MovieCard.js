@@ -77,7 +77,12 @@ export default class MovieCard extends Lightning.Component {
   }
 
   _handleHover() {
+    console.log("%c[MOVIE CARD] HOVER", "color: lightgreen", {
+      cardIndex: this.parent.children.indexOf(this),
+      focusPath: this.stage.focusPath,
+    });
     this._focus();
+    console.log("asdf index: ", this.parent.children.indexOf(this));
     this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
   }
 
