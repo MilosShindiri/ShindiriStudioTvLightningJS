@@ -40,6 +40,7 @@ export default class HorCard extends Lightning.Component {
   }
 
   _handleClick() {
+    if (Router.isNavigating()) return;
     this._handleEnter();
   }
 

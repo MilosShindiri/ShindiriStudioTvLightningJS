@@ -5,9 +5,8 @@ export default class VerticalContainer extends Lightning.Component {
     items: [],
     title: "",
     enableScroll: false,
-    scrollMargin: 20,
+    parentState: "",
   };
-
   _focusedIndex = 0;
   _scrollPosition = 0;
 
@@ -43,20 +42,13 @@ export default class VerticalContainer extends Lightning.Component {
       titleMarginBottom,
       titleMarginTop,
       titleAlign,
-      scrollMargin,
       ...rest
     } = props;
 
     this._props = { ...this._props, ...rest };
 
-    if (scrollMargin !== undefined) {
-      this._props.scrollMargin = scrollMargin;
-    }
-
     if (w) this.patch({ w });
     if (h) this.patch({ h });
-
-    // naslov
     if (title && title !== "") {
       const alignment = titleAlign || "left";
       const marginBottom =
@@ -97,7 +89,6 @@ export default class VerticalContainer extends Lightning.Component {
       this.Title.patch({ visible: false });
     }
 
-    // dodavanje itema
     if (items && items !== this._props.items) {
       this._props.items = items;
       this.Items.childList.clear();
@@ -122,27 +113,31 @@ export default class VerticalContainer extends Lightning.Component {
 
   _reCalibrateScroll() {
     if (!this._props.enableScroll || !this.h) return;
-
     this.stage.update();
-
     const currentFocus = this.Items.children[this._focusedIndex];
     if (!currentFocus) return;
-
     const containerHeight = this.finalH;
     const itemY = currentFocus.finalY;
     const itemH = currentFocus.finalH;
-    const margin = this._props.scrollMargin;
-
     const itemBottom = itemY + itemH + this.Items.y;
     const itemTop = itemY + this.Items.y;
-
     if (itemBottom > containerHeight) {
-      this._scrollPosition -= itemBottom - containerHeight + margin;
+      this._scrollPosition -= itemBottom - containerHeight + 20;
       this.Items.smooth = { y: this._scrollPosition };
     } else if (itemTop < 0) {
-      this._scrollPosition -= itemTop - margin;
+      this._scrollPosition -= itemTop - 20;
       this.Items.smooth = { y: this._scrollPosition };
     }
+  }
+
+  $handleItemHover(index) {
+    if (this._focusedIndex !== index) {
+      this.Items.children[this._focusedIndex]?._unfocus();
+      this._focusedIndex = index;
+    }
+    this.fireAncestors("$verticalContainerIndexChange", index);
+    this._reCalibrateScroll();
+    this.fireAncestors("$handleStateHover", this._props.parentState);
   }
 
   _handleDown() {
@@ -176,34 +171,19 @@ export default class VerticalContainer extends Lightning.Component {
     return false;
   }
 
-  // _focus() {
-  //   const { items } = this._props;
-  //   if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
-  //     this.Items.children[this._focusedIndex]?._focus();
-  //   }
-  // }
-
-  $handleItemHover(index) {
-    if (this._focusedIndex !== index) {
-      this.Items.children[this._focusedIndex]?._unfocus();
-      this._focusedIndex = index;
+  _focus() {
+    const { items } = this._props;
+    if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
+      this.Items.children[this._focusedIndex]?._focus();
     }
-    this._reCalibrateScroll();
-
-    // pošalji svoje ime (MoviesRow ili SeriesRow)
-    this.fireAncestors("$handleStateHover", this.ref);
   }
 
   _unfocus() {
-    this.Items.children[this._focusedIndex]?._unfocus();
+    const { items } = this._props;
+    if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
+      this.Items.children[this._focusedIndex]?._unfocus();
+    }
   }
-
-  // _unfocus() {
-  //   const { items } = this._props;
-  //   if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
-  //     this.Items.children[this._focusedIndex]?._unfocus();
-  //   }
-  // }
 
   _appendItems(items) {
     items?.forEach((item) => {

@@ -80,8 +80,6 @@ export default class Content extends Lightning.Component {
     this.fireAncestors("$handleHoverState", this.ref); //sending ref name
   }
 
-  _handleHover() {}
-
   static _states() {
     return [
       class MoviesRow extends this {

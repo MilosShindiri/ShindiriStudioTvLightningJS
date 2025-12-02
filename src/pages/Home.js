@@ -87,9 +87,9 @@ export default class Home extends Lightning.Component {
   // }
 
   $handleHoverState(ref) {
+    console.log(ref);
     const currentState = this._getState();
     console.warn("WSTV handle", ref !== currentState);
-    console.log(currentState);
     if (ref !== currentState) {
       if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
