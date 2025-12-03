@@ -227,6 +227,10 @@ export default class ProgressBar extends Lightning.Component {
     }
   }
 
+  _handleHover() {
+    this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
+  }
+
   _focus() {
     this._Scrubber.visible = true;
     this.patch({
