@@ -3,7 +3,6 @@ import App from "./App.js";
 import Settings from "../settings.json";
 import { getDevice } from "./utils/device.js";
 
-// Dinamičko podešavanje stage-a i precision-a
 if (Settings) {
   Settings.appSettings.stage.h = window.innerHeight;
   Settings.appSettings.stage.w = window.innerWidth;
@@ -23,7 +22,6 @@ if (Settings) {
   }
 }
 
-// Dinamičko mapiranje tastera po uređaju
 const device = getDevice();
 Settings.appSettings.keys = {};
 
@@ -68,13 +66,10 @@ switch (device) {
     };
     break;
   default:
-    // ostaje prazno ako uređaj nije prepoznat
     break;
 }
 
-// Pokretanje aplikacije
 const app = Launch(App, Settings.appSettings, Settings.platformSettings);
 
-// Dodavanje canvas-a u DOM
 const canvas = app.stage.getCanvas();
 document.body.appendChild(canvas);

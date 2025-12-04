@@ -67,10 +67,6 @@ export default class App extends Router.App {
     );
   }
 
-  // _firstEnable() {
-  //   Router.navigate(PAGE_PATHS.SPLASH);
-  // }
-
   $showLoader() {
     this.Loading.visible = true;
   }
@@ -112,7 +108,7 @@ export default class App extends Router.App {
           label: t("yes_exit"),
           action: () => {
             const device = getDevice();
-            // Router navigation for "Yes, exit now"
+
             switch (device) {
               case "metrological":
                 this.application.closeApp();

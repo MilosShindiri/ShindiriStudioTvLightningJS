@@ -228,10 +228,6 @@ export default class Details extends Lightning.Component {
     this._setState("WatchNow");
   }
 
-  // _firstActive() {
-  //   this._setState("WatchNow");
-  // }
-
   _handleClick() {
     const current = this.state;
     if (current === "WatchNow") {
@@ -243,31 +239,24 @@ export default class Details extends Lightning.Component {
 
   _handleBack() {
     if (Router.getHistory().length > 1) {
-      Router.back(); // vraća te na Movies ili odakle si došao
+      Router.back();
     } else {
-      Router.navigate("home"); // fallback
+      Router.navigate("home");
     }
   }
 
   $handleHoverState(ref) {
     const currentState = this._getState();
 
-    console.log("Details hover state:", ref, currentState);
-
     if (ref !== currentState) {
       if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
     }
-    console.log("Evo ga ce this", this);
   }
 
   static _states() {
     return [
       class WatchNow extends this {
-        // $enter() {
-        //   this._refocus();
-        // }
-
         _getFocused() {
           return this.WatchNow;
         }
@@ -282,10 +271,6 @@ export default class Details extends Lightning.Component {
         }
       },
       class BackButton extends this {
-        // $enter() {
-        //   this._refocus();
-        // }
-
         _getFocused() {
           return this.BackButton;
         }

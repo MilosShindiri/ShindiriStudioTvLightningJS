@@ -129,7 +129,7 @@ export default class Movies extends Lightning.Component {
                 flexItem: { marginRight: 24 },
               })),
               disableScroll: false,
-              // scrollTransition: { duration: 0.8, timingFunction: "ease" },
+
               w: 1700,
               h: 302,
               targetIndex: this._currentIndex ?? 0,
@@ -151,29 +151,20 @@ export default class Movies extends Lightning.Component {
   _active() {
     const history = Router.getHistory();
 
-    // Ako je Movies prva stranica (npr. posle reload-a)
     if (history.length < 2) {
       this._currentIndex = 0;
     } else {
-      const prev = history[history.length - 2]; // stvarno prethodna ruta
+      const prev = history[history.length - 2];
 
-      // Ako dolazimo sa HOME → reset na 0
       if (prev.hash === "home") {
         this._currentIndex = 0;
-      }
-
-      // Ako dolazimo sa DETAILS → vrati index iz params
-      else if (prev.hash === "details" && prev.params?.index !== undefined) {
+      } else if (prev.hash === "details" && prev.params?.index !== undefined) {
         this._currentIndex = prev.params.index;
-      }
-
-      // Inače ne menjamo index (npr. kada se fokus vraća unutar Movies)
-      else {
+      } else {
         this._currentIndex = this._currentIndex ?? 0;
       }
     }
 
-    // Primeni index
     this.MoviesContainer.setIndex(this._currentIndex);
     this.MoviesContainer.scrollToIndex(this._currentIndex);
 
@@ -181,7 +172,6 @@ export default class Movies extends Lightning.Component {
   }
 
   _horizontalContainerIndexChange(index) {
-    // diagnostic log: index changed in Movies horizontal container
     this._currentIndex = index;
     this._debouncedIndexChange(index);
   }
@@ -198,7 +188,7 @@ export default class Movies extends Lightning.Component {
       (img) => `${IMAGE_ROUTE.IMAGE_W1280}${img}`
     );
 
-    this.HeroSlideshow.setImagesOnFocues(heroImages); // this set me background image logic
+    this.HeroSlideshow.setImagesOnFocues(heroImages);
     this.tag("MovieInfo").patch({
       Title: { text: { text: movie.title } },
       Info: { text: { text: movie.description } },
@@ -247,20 +237,3 @@ export default class Movies extends Lightning.Component {
     ];
   }
 }
-
-// MoviesContainer: {
-//   props: {
-//     items: props.movies.map((m) => ({
-//       type: HorCard,
-//       item: { id: m.id, title: m.title, image: m.poster },
-//       flexItem: { marginRight: 24 },
-//     })),
-//     disableScroll: false,
-//     w: 1700,
-//     h: 302,
-//     scrollTransition: {
-//       duration: 0.3,
-//       timingFunction: "ease"
-//     },
-//   },
-// },

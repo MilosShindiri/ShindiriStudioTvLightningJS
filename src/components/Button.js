@@ -74,11 +74,7 @@ export default class Button extends Lightning.Component {
   }
 
   _handleHover() {
-    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
-  }
-
-  _handleUnhover() {
-    // this._unfocus();
+    this.fireAncestors("$handleHoverState", this.ref);
   }
 
   _focus() {

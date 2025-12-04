@@ -28,24 +28,9 @@ export default class Button extends Lightning.Component {
     };
   }
 
-  // $handleHoverState(ref) {
-  //   const currentState = this._getState();
-  //   // console.log("WSTV", ref);
-
-  //   if (ref !== currentState) {
-  //     if (currentState) this.tag(currentState)._unfocus();
-  //     this._setState(ref);
-  //   }
-  // }
-
   _handleHover() {
-    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+    this.fireAncestors("$handleHoverState", this.ref);
   }
-
-  // _handleHover() {
-  //   this._focus();
-  //   this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
-  // }
 
   _focus() {
     this.patch({
@@ -54,7 +39,6 @@ export default class Button extends Lightning.Component {
   }
 
   _unfocus() {
-    console.warn("asdasdasd");
     this.patch({
       color: 0xff2f2f2f,
     });

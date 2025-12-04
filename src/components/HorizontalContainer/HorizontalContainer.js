@@ -69,7 +69,6 @@ export default class HorizontalContainer extends Lightning.Component {
   set props(props) {
     const { items, railTitle, ...rest } = props;
 
-    // Merge old props with new ones
     this._props = {
       ...this._props,
       ...rest,
@@ -79,7 +78,6 @@ export default class HorizontalContainer extends Lightning.Component {
 
     const { cardType, targetIndex } = rest;
 
-    // Handle title and container layout
     if (this._props.railTitle && this._props.railTitle !== "") {
       const { h } = rest;
       this.Items.patch({ y: 0 });
@@ -105,7 +103,6 @@ export default class HorizontalContainer extends Lightning.Component {
 
     this.patch({ w: this._w });
 
-    // Only update items if they exist
     if (this._props.items && this._props.items.length) {
       this.Items.x = 0;
       this.Items.childList.clear();
@@ -172,98 +169,23 @@ export default class HorizontalContainer extends Lightning.Component {
     return false;
   }
 
-  // $handleItemHover(index) {
-  //   if (this._focusedIndex !== index) {
-  //     this.Items.children[this._focusedIndex]?._unfocus();
-  //     this._focusedIndex = index;
-  //   }
-  //   this._reCalibrateScroll();
-  //   this.parent.parent.type &&
-  //   (this.parent.parent.type.name === "VerticalContainer" ||
-  //     this.parent.parent.type.name === "EPGContainer")
-  //     ? this.fireAncestors(
-  //         "$handleItemHover",
-  //         this.parent.children.indexOf(this)
-  //       )
-  //     : this.fireAncestors(
-  //         "$handleStateHover",
-  //         this.parent.children.indexOf(this),
-  //         this._props.parentState
-  //       );
-  // }
-
   $handleItemHover(index) {
     if (this._focusedIndex !== index) {
       this.Items.children[this._focusedIndex]?._unfocus();
       this._focusedIndex = index;
     }
     this._reCalibrateScroll();
-    // console.log("WSTV handle horizontal");
+
     this.fireAncestors("$handleHoverState", this.ref);
   }
 
   _unfocus() {
-    // console.log("WSTV da");
     this.Items.children[this._focusedIndex]?._unfocus();
   }
 
   setFocus(index) {
     this._setFocusedIndex(index);
   }
-
-  //vidi za ovaj focus i unfocus
-
-  // _focus() {
-  //   const { items } = this._props;
-  //   if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
-  //     this.Items.children[this._focusedIndex]?._focus();
-  //   }
-  // }
-
-  // _unfocus() {
-  //   const { items } = this._props;
-  //   if (this._focusedIndex >= 0 && this._focusedIndex < items.length) {
-  //     this.Items.children[this._focusedIndex]?._unfocus();
-  //   }
-  // }
-
-  // _handleHover() {
-  //   let verticalState;
-
-  //   const parentContainer = this.parent.parent.ref;
-  //   const indexForVC = this.parent.children.indexOf(this);
-  //   const constructorName =
-  //     this.Items.children[this._focusedIndex]?.constructor.name;
-
-  //   if (
-  //     constructorName === "PosterRailItem" &&
-  //     parentContainer === "VODSection"
-  //   ) {
-  //     //case for search page
-  //     verticalState = "VODSection";
-  //   }
-  //   if (
-  //     constructorName === "PosterRailItem" &&
-  //     parentContainer !== "VODSection"
-  //   ) {
-  //     verticalState = "VodContainer";
-  //   }
-  //   if (constructorName === "SportsEventsRailItem") {
-  //     verticalState = "VodContentContainer";
-  //   }
-  //   if (constructorName === "LandscapeRailItem") {
-  //     verticalState = "Items";
-  //   }
-  //   if (constructorName === "EPGRailItems") {
-  //     verticalState = "EPGS";
-  //   }
-
-  //   this.fireAncestors(
-  //     "$horizontalContainerPosterIndexChange",
-  //     indexForVC,
-  //     verticalState
-  //   );
-  // }
 
   _handleRight() {
     // this.Items.children[this._focusedIndex]._unfocus();

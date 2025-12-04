@@ -10,12 +10,10 @@ export default class Home extends Lightning.Component {
     return {
       w: SCREEN.w,
       h: SCREEN.h,
-      // rect: true,
 
       Background: {
         src: Utils.asset("images/backgroundImage.png"),
         shader: null,
-        // colors: colors.black,
       },
       Content: {
         collision: true,
@@ -51,9 +49,7 @@ export default class Home extends Lightning.Component {
     return this.tag("Button");
   }
 
-  // forward router-provided props (e.g. movies/series from fetchHomeData) to Content
   set props(props) {
-    // if Content exists, immediately forward; otherwise store pending
     if (this.tag("Content")) {
       this.tag("Content").props = props;
     } else {
@@ -63,8 +59,7 @@ export default class Home extends Lightning.Component {
 
   _init() {
     this._setState("Content");
-    // Router.focusWidget("Menu");
-    // apply any props that were set before init
+
     if (this._pendingProps && this.tag("Content")) {
       this.tag("Content").props = this._pendingProps;
       this._pendingProps = null;
@@ -79,12 +74,6 @@ export default class Home extends Lightning.Component {
 
     this.fireAncestors("$appClose");
   }
-  // _handleHover() {
-  //   Router.focusPage();
-  // }
-  // $setStateOnScroll(nextState) {
-  //   this._setState(nextState);
-  // }
 
   $handleHoverState(ref) {
     if (Router.getActiveWidget()) {
@@ -94,32 +83,14 @@ export default class Home extends Lightning.Component {
 
     if (ref !== currentState) {
       if (currentState) {
-        console.log("asdf curState: ", currentState);
         // this.tag(currentState)._unfocus();
       }
-
-      console.log("asdf ref: ", ref);
 
       this._setState(ref);
     }
   }
 
-  // _handleUnhover() {
-  //   Router.focusWidget("Menu");
-  // }
-
-  // _captureKey() {
-  //   // console.log("key pressed", this._getState());
-  //   return false;
-  // }
-
-  //   // ako želiš da koristiš currentState
-  // }
-
   _getFocused() {
-    console.log("%c[HOME] _getFocused CALLED", "color: magenta", {
-      focusPath: this.stage?.focusPath,
-    });
     return this[this._getState()];
   }
 
@@ -127,7 +98,6 @@ export default class Home extends Lightning.Component {
     return [
       class Button extends this {
         $enter() {
-          console.log("%c[HOME] ENTER STATE:", "color: green", "Content");
           this.Button.setSmooth("alpha", 1);
           this.Content.setSmooth("alpha", 0.6);
           this.TopChannels.setSmooth("alpha", 0.6);
@@ -144,7 +114,6 @@ export default class Home extends Lightning.Component {
       },
       class Content extends this {
         $enter() {
-          console.log("%c[HOME] ENTER STATE:", "color: green", "Content");
           this.Content.setSmooth("alpha", 1);
           this.TopChannels.setSmooth("alpha", 0.6);
           this.Button.setSmooth("alpha", 0.6);
@@ -163,16 +132,10 @@ export default class Home extends Lightning.Component {
           this._setState("TopChannels");
           return true;
         }
-
-        // _handleDown() {
-        //   this._setState("ButtonState");
-        //   return true;
-        // }
       },
 
       class TopChannels extends this {
         $enter() {
-          console.log("%c[HOME] ENTER STATE:", "color: green", "Content");
           this.Content.setSmooth("alpha", 0.6);
           this.Button.setSmooth("alpha", 0.6);
           this.TopChannels.setSmooth("alpha", 1);

@@ -61,7 +61,7 @@ export class MovieService {
     return data;
   }
 
-  // Dodaj ostale metode po potrebi...
+  // Additional methods can be added here following the same pattern
 }
 
 export const movieService = new MovieService();

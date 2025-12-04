@@ -13,13 +13,9 @@ export default class Navbar extends Lightning.Component {
   }
 
   _getFocused() {
-    console.log("%c[MENU] _getFocused CALLED", "color: pink", {
-      focusPath: this.stage.focusPath,
-    });
     return this.Items.NavItems;
   }
 
-  // Prosleđujemo route ka NavbarItems
   set props(props) {
     const { route } = props;
     if (this.Items) {

@@ -16,20 +16,7 @@ export default class Content extends Lightning.Component {
     };
   }
 
-  // async _init() {
-  // If page routing already provided movies/series, `set props` will handle it.
-  // Otherwise, fetch fallback data so component still works standalone.
-  //   if (!this._hasReceivedProps) {
-  //     this._applyData({
-  //       movies: movies.slice(0, 5),
-  //       series: series.slice(0, 5),
-  //     });
-  //   }
-  // }
-
-  // Accept props injected by the router's `on` handler (fetchHomeData sets page.props)
   set props(props) {
-    // mark that we received routed props so _init fallback won't fetch again
     this._hasReceivedProps = true;
     this._applyData(props);
     this._setState("MoviesRow");
@@ -70,19 +57,13 @@ export default class Content extends Lightning.Component {
   }
 
   $handleHoverState(ref) {
-    console.log("%c[CONTENT] HOVER FROM CHILD", "color: cyan", {
-      ref,
-      contentState: this._getState(),
-      stageFocus: this.stage.focus,
-    });
     const currentState = this._getState();
-    // console.log("WSTV", ref);
 
     if (ref !== currentState) {
       if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
     }
-    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+    this.fireAncestors("$handleHoverState", this.ref);
   }
 
   static _states() {
@@ -98,7 +79,6 @@ export default class Content extends Lightning.Component {
         }
 
         _handleUp() {
-          // Router.focusWidget("Menu");
           return false;
         }
 

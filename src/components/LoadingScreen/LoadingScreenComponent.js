@@ -50,11 +50,9 @@ export default class LoadingScreenComponent extends Lightning.Component {
   _spin() {
     this._Spinner
       .animation({
-        duration: 2, // animation duration in seconds
-        repeat: -1, // repeat indefinitely
-        actions: [
-          { p: "rotation", v: { 0: 0, 1: 10 * Math.PI } }, // rotate 360 degrees
-        ],
+        duration: 2,
+        repeat: -1,
+        actions: [{ p: "rotation", v: { 0: 0, 1: 10 * Math.PI } }],
       })
       .start();
   }

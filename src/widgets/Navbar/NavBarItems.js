@@ -26,19 +26,13 @@ export default class NavbarItems extends Lightning.Component {
     };
   }
   $handleHoverState(ref) {
-    console.log("%c[CONTENT] HOVER FROM CHILD", "color: cyan", {
-      ref,
-      contentState: this._getState(),
-      stageFocus: this.stage.focus,
-    });
     const currentState = this._getState();
-    // console.log("WSTV", ref);
 
     if (ref !== currentState) {
       if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
     }
-    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+    this.fireAncestors("$handleHoverState", this.ref);
   }
   get NavItems() {
     return this.tag("NavItems");
@@ -49,7 +43,6 @@ export default class NavbarItems extends Lightning.Component {
   }
 
   _init() {
-    // Podaci za navbar
     const navData = [{ label: "HOME" }, { label: "MOVIES" }];
 
     const navItems = navData.map((item) => ({ type: NavElement, item }));
@@ -57,7 +50,6 @@ export default class NavbarItems extends Lightning.Component {
     this.NavItems.props = { items: navItems, h: 49, disableScroll: true };
   }
 
-  // setter props prima route i markira selektovani element
   set props(props) {
     const { route } = props;
     if (!route) return;
@@ -71,32 +63,9 @@ export default class NavbarItems extends Lightning.Component {
     }
   }
 
-  // $handleHoverIndex(index) {
-  //   if (index === undefined || index === null) return;
-
-  //   // Ako već postoji prethodni fokusirani element, unfocus-uj ga
-  //   if (this._currentIndex !== undefined && this._currentIndex !== index) {
-  //     const prevItem = this.NavItems.Items.children[this._currentIndex];
-  //     if (prevItem) prevItem._unfocus();
-  //   }
-
-  //   // Fokusiraj novi element
-  //   const newItem = this.NavItems.Items.children[index];
-  //   if (newItem) newItem._focus();
-
-  //   // Sačuvaj trenutno fokusirani index
-  //   this._currentIndex = index;
-  // }
-
-  // _handleHover() {
-  //   this.fireAncestors("$handleHoverState", this.ref); //sending ref name
-  // }
-
   _setSelected(index) {
-    // HorizontalContainer target
     this.NavItems.props = { targetIndex: index };
 
-    // Patch-ujemo selektovane elemente
     this.NavItems.Items.children.forEach((item, i) => {
       item.selected = i === index;
     });

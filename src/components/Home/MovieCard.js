@@ -9,7 +9,6 @@ export default class MovieCard extends Lightning.Component {
       collision: true,
       rect: true,
       flex: { direction: "column", paddingRight: 24 },
-      // flexItem: { marginLeft: 0 },
       color: 0x00000000,
       w: 229,
       h: 359,
@@ -41,7 +40,7 @@ export default class MovieCard extends Lightning.Component {
   set movie(data) {
     this._movie = data;
     this.tag("Image").texture = Img(data.thumbnail).exact(229, 300);
-    // this.tag("Image").src = data.thumbnail;
+
     this.tag("Title").text = data.title;
   }
 
@@ -77,12 +76,8 @@ export default class MovieCard extends Lightning.Component {
   }
 
   _handleHover() {
-    console.log("%c[MOVIE CARD] HOVER", "color: lightgreen", {
-      cardIndex: this.parent.children.indexOf(this),
-      focusPath: this.stage.focusPath,
-    });
     this._focus();
-    console.log("asdf index: ", this.parent.children.indexOf(this));
+
     this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
   }
 

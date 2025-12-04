@@ -35,7 +35,6 @@ export default class Splash extends Lightning.Component {
   }
 
   _init() {
-    // jednostavna animacija za fade-in
     this._fadeInAnimation = this.animation({
       duration: 1.5,
       actions: [
@@ -43,49 +42,20 @@ export default class Splash extends Lightning.Component {
         { t: "LoadingText", p: "alpha", v: { 0: 0, 1: 1 } },
       ],
     });
-
-    this._fadeInAnimation.start();
   }
 
-  async _firstActive() {
-    console.log("Splash je sada vidljiv! Pokrećem timer.");
+  async _active() {
+    await new Promise((res) => requestAnimationFrame(res));
 
-    // sada kreće TVOJ splash timer
-    await new Promise((resolve) => setTimeout(resolve, 9000));
+    this._fadeInAnimation.start();
+    await this._fadeInAnimation;
 
-    console.log("Splash gotov, idem na Home");
+    await new Promise((res) => setTimeout(res, 9000));
+
     Router.navigate(PAGE_PATHS.HOME);
   }
 
-  // _firstActive() {
-  // mali delay da LG loader nestane
-  //   setTimeout(() => {
-  //     console.log("Pokrećem splash timer...");
-
-  // splash traje 9 sekundi
-  //     setTimeout(() => {
-  //       console.log("Splash gotov, prelazim na Home");
-  //       Router.navigate(PAGE_PATHS.HOME);
-  //     }, 9000);
-  //   }, 100); // 100ms delay
-  // }
-
-  // async _active() {
-  //   simulacija inicijalnog fetcha (npr. učitavanje podataka ili fontova)
-  //   await this._simulateLoading();
-
-  //   nakon što sve završi, idi na Home
-  //   Router.navigate("home");
-  // }
-  //todo iskoristi na jedno mesto
-  // _simulateLoading() {
-  //   return new Promise((resolve) => {
-  //     setTimeout(() => resolve(), 9000); // 3 sekunde splash
-  //   });
-  // }
-
   _disable() {
-    // čišćenje animacija
     if (this._fadeInAnimation) {
       this._fadeInAnimation.stop();
       this._fadeInAnimation = null;

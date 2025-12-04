@@ -52,7 +52,7 @@ export default class VerticalItem extends Lightning.Component {
       PaddingWrapper: {
         Image: {
           texture: Img(data.image).exact(45, 45),
-          // ako je SVG:
+          // if it is SVG format use:
           // texture: Lightning.Tools.getSvgTexture(data.image, 45, 45, { precision: 4.0 }),
         },
         Title: {
@@ -65,7 +65,6 @@ export default class VerticalItem extends Lightning.Component {
   }
 
   _handleHover() {
-    // console.log("dadada");
     this._focus();
     this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
   }

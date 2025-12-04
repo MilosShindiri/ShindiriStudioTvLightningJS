@@ -101,9 +101,6 @@ export default class ProgressBar extends Lightning.Component {
     this._Scrubber.x = px;
   }
 
-  // crtam progress bar sa showTime
-  // Ako korisnik trenutno seek-a (_newTime postoji) → koristi _newTime
-  // Ako ne → koristi trenutno vrijeme videa (VideoPlayer.currentTime)
   _updateProgressBar() {
     const shownTime =
       this._newTime != null ? this._newTime : VideoPlayer.currentTime;
@@ -118,13 +115,7 @@ export default class ProgressBar extends Lightning.Component {
     this.progress(px);
   }
 
-  //   computeSeekTime: računa novo vrijeme, brine da ne izađe iz opsega [0, duration]
-  // _updateProgressBar(): update UI (tekst, crvena traka, scrubber)
-  // requestAnimationFrame: ponovo poziva _startSeekLoop() na sljedećem frame-u
-  // Ovde nastaje kontinuirana petlja dok korisnik drži dugme.
   _startSeekLoop() {
-    // console.warn("WSTV", this._newTime);
-
     if (!this._seeking) return;
 
     this._newTime = this.computeSeekTime(this._seekDirection);
@@ -133,38 +124,20 @@ export default class ProgressBar extends Lightning.Component {
 
     this._rafId = requestAnimationFrame(() => this._startSeekLoop());
   }
-  //   _startSeekLoop() izračunava novo vrijeme (_newTime)
-  // update-uje progress bar (_updateProgressBar())
-  // i poziva se ponovo na sljedećem frame-u
-  // To stvara kontinuiranu petlju:
-  // frame #1 → update _newTime + UI
-  // frame #2 → update _newTime + UI
-  // frame #3 → update _newTime + UI
-  // … sve dok _seeking = true
-  // Bez ovoga, seek bi bio “jedan korak” i UI ne bi reagovao glatko.
-  // U _beginSeeking(direction):
-  // _seeking = true → signalizira da petlja treba raditi
-  // _seekDirection se postavlja na 1 (desno) ili -1 (lijevo)
-  // _newTime se inicijalizuje na trenutno vrijeme videa ako još nije postavljeno
-  // Pokreće se _startSeekLoop()
 
   _beginSeeking(direction) {
-    if (this._seeking) return; // ako već seekujemo, ne radi ništa
+    if (this._seeking) return;
 
-    this._seeking = true; // sada smo u “seeking” modu
+    this._seeking = true;
     this._seekDirection = direction;
 
     if (this._newTime == null) {
       this._newTime = VideoPlayer.currentTime;
     }
 
-    this._startSeekLoop(); // start samo JEDAN loop
+    this._startSeekLoop();
   }
 
-  //   _seeking = false → signal za prekid petlje
-  // _seekDirection = 0
-  // cancelAnimationFrame(_rafId) → zaustavlja petlju
-  // Ako postoji _newTime → stvarno seek-a video:
   _stopSeeking() {
     if (!this._seeking) return;
 
@@ -179,7 +152,6 @@ export default class ProgressBar extends Lightning.Component {
     if (this._newTime != null) {
       VideoPlayer.seek(this._newTime);
       this._newTime = null;
-      // Update UI jednom finalnom _updateProgressBar() da bar prikazuje tačno stanje videa
     }
     this._updateProgressBar();
   }
@@ -196,21 +168,21 @@ export default class ProgressBar extends Lightning.Component {
     clearTimeout(this._singlePressTimeout);
 
     this._singlePressTimeout = setTimeout(() => {
-      this._beginSeeking(5); // dug pritisak → loop
-    }, 200); // 200ms threshold za hold
+      this._beginSeeking(5);
+    }, 200);
   }
 
   _handleLeft() {
     clearTimeout(this._singlePressTimeout);
     this._singlePressTimeout = setTimeout(() => {
-      this._beginSeeking(-5); // dug pritisak → loop unazad
-    }, 200); // 200ms threshold za hold
+      this._beginSeeking(-5);
+    }, 200);
   }
 
   _handleRightRelease() {
     clearTimeout(this._singlePressTimeout);
     if (!this._seeking) {
-      VideoPlayer.seek(VideoPlayer.currentTime + 1); // kratki klik → jump 1s
+      VideoPlayer.seek(VideoPlayer.currentTime + 1);
       this._updateProgressBar();
     } else {
       this._stopSeeking();

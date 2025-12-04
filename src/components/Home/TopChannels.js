@@ -79,12 +79,10 @@ export default class TopChannels extends Lightning.Component {
 
   $handleStateHover(ref) {
     const currentState = this._getState();
-    // console.log("WSTV", ref);
 
     if (ref !== currentState) {
-      // if (currentState) this.tag(currentState)._unfocus();
       this._setState(ref);
     }
-    this.fireAncestors("$handleHoverState", this.ref); //sending ref name
+    this.fireAncestors("$handleHoverState", this.ref);
   }
 }
