@@ -53,24 +53,17 @@ export default class Button extends Lightning.Component {
     this._unfocusedColor = unfocusedColor;
     this._focusedColor = focusedColor;
 
-    this.patch({
+    const patchObj = {
       color: unfocusedColor,
       Wrapper: {
         Label: {
-          text: {
-            text: label,
-          },
+          text: { text: label },
         },
+        Icon: icon ? { visible: true, src: icon } : { visible: false },
       },
-    });
+    };
 
-    if (icon) {
-      this.tag("Icon").patch({
-        src: icon,
-      });
-    } else {
-      this.tag("Icon").visible = false;
-    }
+    this.patch(patchObj);
   }
 
   _handleHover() {

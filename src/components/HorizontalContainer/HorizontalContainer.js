@@ -176,6 +176,8 @@ export default class HorizontalContainer extends Lightning.Component {
     }
     this._reCalibrateScroll();
 
+    this.fireAncestors("$handleItemHover", index);
+
     this.fireAncestors("$handleHoverState", this.ref);
   }
 

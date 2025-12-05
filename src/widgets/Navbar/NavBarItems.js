@@ -25,15 +25,7 @@ export default class NavbarItems extends Lightning.Component {
       },
     };
   }
-  $handleHoverState(ref) {
-    const currentState = this._getState();
 
-    if (ref !== currentState) {
-      if (currentState) this.tag(currentState)._unfocus();
-      this._setState(ref);
-    }
-    this.fireAncestors("$handleHoverState", this.ref);
-  }
   get NavItems() {
     return this.tag("NavItems");
   }
@@ -69,6 +61,16 @@ export default class NavbarItems extends Lightning.Component {
     this.NavItems.Items.children.forEach((item, i) => {
       item.selected = i === index;
     });
+  }
+
+  $handleHoverState(ref) {
+    const currentState = this._getState();
+
+    if (ref !== currentState) {
+      if (currentState) this.tag(currentState)._unfocus();
+      this._setState(ref);
+    }
+    this.fireAncestors("$handleHoverState", this.ref);
   }
 
   _handleDown() {

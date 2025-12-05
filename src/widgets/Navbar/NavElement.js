@@ -64,6 +64,11 @@ export default class NavElement extends Lightning.Component {
     this._handleEnter();
   }
 
+  _handleEnter() {
+    Router.navigate(this._item.label.toLowerCase());
+    return true;
+  }
+
   _focus() {
     this._isFocused = true;
     this._applyVisualState();
@@ -98,10 +103,5 @@ export default class NavElement extends Lightning.Component {
     }
 
     this.patch(patch);
-  }
-
-  _handleEnter() {
-    Router.navigate(this._item.label.toLowerCase());
-    return true;
   }
 }

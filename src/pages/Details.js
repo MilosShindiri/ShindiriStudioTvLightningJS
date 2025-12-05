@@ -1,6 +1,7 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import Button from "../components/Button";
 import colors from "../styles/colors";
+import { formatMetaInfo } from "../utils/detailsInfoFormatters";
 
 export default class Details extends Lightning.Component {
   static _template() {
@@ -145,42 +146,41 @@ export default class Details extends Lightning.Component {
   }
 
   _init() {
-    this.BackButton.patch({
-      w: 112,
-      h: 64,
-      props: {
-        icon: Utils.asset("images/BackButtonIcon.png"),
-      },
-      Wrapper: {
+    this.tag("Content").patch({
+      BackButton: {
         w: 112,
         h: 64,
-        Icon: {
-          w: 35,
-          h: 35,
+        props: {
+          icon: Utils.asset("images/BackButtonIcon.png"),
+        },
+        Wrapper: {
+          w: 112,
+          h: 64,
+          Icon: { w: 35, h: 35 },
         },
       },
-    });
 
-    this.WatchNow.patch({
-      w: 286,
-      h: 78,
-      props: {
-        label: "WATCH NOW",
-        icon: Utils.asset("images/WatchNow.png"),
-      },
-      Wrapper: {
-        w: (w) => w,
-        h: (h) => h,
-        Icon: {
-          w: 16,
-          h: 16,
-        },
-        Label: {
-          flexItem: { marginLeft: 13 },
+      MovieContent: {
+        Details: {
+          WatchNow: {
+            w: 286,
+            h: 78,
+            props: {
+              label: "WATCH NOW",
+              icon: Utils.asset("images/WatchNow.png"),
+            },
+            Wrapper: {
+              w: (w) => w,
+              h: (h) => h,
+              Icon: { w: 16, h: 16 },
+              Label: {
+                flexItem: { marginLeft: 13 },
+              },
+            },
+          },
         },
       },
     });
-    // TODO uradi u jedan patch zbog ...
 
     if (this._detailsData) {
       this._updateUI();
@@ -194,10 +194,7 @@ export default class Details extends Lightning.Component {
     this.tag("Content").patch({
       MetaInfo: {
         text: {
-          // obicno se kreira fja koja vraca result za ovako nesto, a ne direktno u tekst
-          text: `${movie.genres.join(", ")}\n${movie.runtime} min\n${
-            movie.country
-          } • ${movie.releaseYear} • IMDb: ${movie.rating}`,
+          text: formatMetaInfo(movie),
         },
       },
 

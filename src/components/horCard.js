@@ -39,6 +39,13 @@ export default class HorCard extends Lightning.Component {
     this.tag("Title").text.text = data.title;
   }
 
+  _handleEnter() {
+    Router.navigate(`details/${this._item.id}`, {
+      movie: this._item,
+      index: this._item.index,
+    });
+  }
+
   _handleClick() {
     if (Router.isNavigating()) return;
     this._handleEnter();
@@ -47,10 +54,6 @@ export default class HorCard extends Lightning.Component {
   _handleHover() {
     this._focus();
     this.fireAncestors("$handleItemHover", this.parent.children.indexOf(this));
-  }
-
-  _handleUnhover() {
-    this._unfocus();
   }
 
   _focus() {
@@ -66,12 +69,5 @@ export default class HorCard extends Lightning.Component {
     if (shader) {
       shader.stroke = 0;
     }
-  }
-
-  _handleEnter() {
-    Router.navigate(`details/${this._item.id}`, {
-      movie: this._item,
-      index: this._item.index,
-    });
   }
 }

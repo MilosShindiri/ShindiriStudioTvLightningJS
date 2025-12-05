@@ -86,7 +86,7 @@ export default class Movies extends Lightning.Component {
   get HeroSlideshow() {
     return this.tag("HeroSlideshow");
   }
-  // TODO iskoristi iz lodash
+
   _debounce(func, wait) {
     let timeout;
     return (...args) => {
@@ -118,7 +118,6 @@ export default class Movies extends Lightning.Component {
           MoviesContainer: {
             props: {
               items: props.movies.map((m) => ({
-                //TODO napisi bolju konvenciju
                 type: HorCard,
                 item: {
                   id: m.id,
@@ -168,6 +167,8 @@ export default class Movies extends Lightning.Component {
     this.MoviesContainer.setIndex(this._currentIndex);
     this.MoviesContainer.scrollToIndex(this._currentIndex);
 
+    this._updateHero(this._currentIndex);
+
     this._setState("MoviesContainer");
   }
 
@@ -188,7 +189,7 @@ export default class Movies extends Lightning.Component {
       (img) => `${IMAGE_ROUTE.IMAGE_W1280}${img}`
     );
 
-    this.HeroSlideshow.setImagesOnFocues(heroImages);
+    this.HeroSlideshow.setImagesOnFocus(heroImages);
     this.tag("MovieInfo").patch({
       Title: { text: { text: movie.title } },
       Info: { text: { text: movie.description } },
@@ -215,6 +216,11 @@ export default class Movies extends Lightning.Component {
         preloadTexture(src);
       });
     }
+  }
+
+  $handleItemHover(index) {
+    this._currentIndex = index;
+    this._debouncedIndexChange(index);
   }
 
   static _states() {

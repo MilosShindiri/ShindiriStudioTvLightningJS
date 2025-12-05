@@ -12,16 +12,13 @@ export default class Navbar extends Lightning.Component {
     return this.tag("Items");
   }
 
-  _getFocused() {
-    return this.Items.NavItems;
-  }
-
   set props(props) {
     const { route } = props;
     if (this.Items) {
       this.Items.props = { route };
     }
   }
+
   _handleBack() {
     const router = Router.getHistory().filter(
       (history) => history.hash != "splash" && history.hash != "cmp"

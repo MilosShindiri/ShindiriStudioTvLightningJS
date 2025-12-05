@@ -47,6 +47,7 @@ export default class Player extends Lightning.Component {
       x: 20,
     },
   ];
+
   static _template() {
     return {
       Spinner: {
@@ -117,12 +118,15 @@ export default class Player extends Lightning.Component {
     }
     this.$exitVideo();
   }
+
   _handleForward() {
     VideoPlayer.skip(5);
   }
+
   _handleBackwards() {
     VideoPlayer.skip(-5);
   }
+
   _handlePlayPause() {
     if (!this._isSeeking) {
       VideoPlayer.playPause();
@@ -130,6 +134,7 @@ export default class Player extends Lightning.Component {
       this.setIsPlaying(this._isPlaying);
     }
   }
+
   $handleHoverState(ref) {
     const currentState = this._getState();
     if (ref !== currentState) {
@@ -137,6 +142,7 @@ export default class Player extends Lightning.Component {
       this._setState(ref);
     }
   }
+
   _hidePlayerControlDebounce() {
     clearTimeout(this._hideWrapperTimeout);
     if (!this._PlayerControl.visible || this._ProgressBar._newTime !== null)
@@ -146,6 +152,7 @@ export default class Player extends Lightning.Component {
       this._PlayerControl.visible = false;
     }, 5000);
   }
+
   _init() {
     window.addEventListener("mousemove", () => {
       if (this._PlayerControl.visible === false) {
@@ -153,6 +160,7 @@ export default class Player extends Lightning.Component {
         this._hidePlayerControlDebounce();
       }
     });
+
     const buttonsMaped = this._buttons.map((item) => ({
       type: PlayerControllButton,
       props: {
@@ -165,6 +173,7 @@ export default class Player extends Lightning.Component {
         callback: this[item.handler].bind(this),
       },
     }));
+
     this.patch({
       PlayerControl: {
         Controller: {
@@ -183,6 +192,7 @@ export default class Player extends Lightning.Component {
     this._setState("CenteredButtonWrapper");
     this._spin();
   }
+
   setIsPlaying(status) {
     this._isPlaying = status;
     this._PlayPauseButton.patch({
@@ -343,6 +353,7 @@ export default class Player extends Lightning.Component {
       },
     ];
   }
+
   _spin() {
     this._Spinner
       .animation({

@@ -82,6 +82,7 @@ export default class App extends Router.App {
       h: SCREEN.h,
     };
   }
+
   $unpunchHole() {
     this.tag("Background").shader = {
       w: 0,
@@ -134,8 +135,3 @@ export default class App extends Router.App {
     return this.tag("Widgets.Menu");
   }
 }
-
-//TODO uradi isto i za Background
-// Dodaj enum za globalne sirine i visine - reseno
-// widget treba da ti bude u widgets folderu - reseno
-// dodaj enum za pagePaths - reseno

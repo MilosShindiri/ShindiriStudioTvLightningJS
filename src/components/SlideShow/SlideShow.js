@@ -69,7 +69,7 @@ export default class Slideshow extends Lightning.Component {
     }
   }
 
-  setImagesOnFocues(images) {
+  setImagesOnFocus(images) {
     this._stopSlideshow();
     this._images = images;
     this._currentIndex = 0;

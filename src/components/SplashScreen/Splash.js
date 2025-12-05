@@ -20,7 +20,6 @@ export default class Splash extends Lightning.Component {
         // alpha: 0,
       },
       LoadingText: {
-        //iskoritsti flex za centriranje
         x: 830,
         y: 780,
         text: {
