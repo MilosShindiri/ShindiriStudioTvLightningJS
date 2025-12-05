@@ -10,41 +10,34 @@ export default class Slideshow extends Lightning.Component {
     return {
       w: 1920,
       h: 697,
-      CurrentImage: {
+
+      Image: {
         w: 1920,
         h: 697,
         alpha: 1,
       },
-      NextImage: {
-        w: 1920,
-        h: 697,
-        alpha: 0,
-      },
     };
   }
 
-  //todo ispravi logiku da koristis jedan tag u kojem ces da menjas sliku. Takodje obrati paznju na konvenciju naziva
-  // obrati paznju na strukturu
-
   set images(images) {
-    this._images = images;
-    if (images && images.length > 0) {
-      this._loadImage(this.tag("CurrentImage"), images[0]);
-      if (images.length > 1) {
-        this._startSlideshow();
-      }
+    this._images = images || [];
+    this._currentIndex = 0;
+
+    if (this._images.length) {
+      this._setImage(this._images[0]);
+      this._startIfNeeded();
     }
   }
 
-  set transitionDuration(duration) {
-    this._transitionDuration = duration;
+  set transitionDuration(v) {
+    this._transitionDuration = v;
   }
 
-  _loadImage(element, src) {
-    element.patch({
+  _setImage(src) {
+    this.tag("Image").patch({
       texture: {
         type: Lightning.textures.ImageTexture,
-        src: src,
+        src,
         resizeMode: {
           type: "cover",
           w: 1920,
@@ -55,11 +48,14 @@ export default class Slideshow extends Lightning.Component {
     });
   }
 
-  _startSlideshow() {
+  _startIfNeeded() {
     this._stopSlideshow();
-    this._interval = setInterval(() => {
-      this._transitionToNext();
-    }, this._transitionDuration);
+    if (this._images.length > 1) {
+      this._interval = setInterval(
+        () => this._transition(),
+        this._transitionDuration
+      );
+    }
   }
 
   _stopSlideshow() {
@@ -71,45 +67,28 @@ export default class Slideshow extends Lightning.Component {
 
   setImagesOnFocus(images) {
     this._stopSlideshow();
-    this._images = images;
+    this._images = images || [];
     this._currentIndex = 0;
 
-    if (images && images.length > 0) {
-      this._loadImage(this.tag("CurrentImage"), images[0]);
-      this.tag("CurrentImage").patch({ alpha: 1 });
-      this.tag("NextImage").patch({ alpha: 0 });
-      if (images.length > 1) {
-        this._startSlideshow();
-      }
+    if (this._images.length) {
+      this._setImage(this._images[0]);
+      this.tag("Image").setSmooth("alpha", 1, { duration: 0 });
+      this._startIfNeeded();
     }
   }
 
-  _transitionToNext() {
-    if (!this._images || this._images.length <= 1) return;
+  _transition() {
+    if (this._images.length <= 1) return;
 
-    const currentImage = this.tag("CurrentImage");
-    const nextImage = this.tag("NextImage");
+    const img = this.tag("Image");
 
-    this._currentIndex = (this._currentIndex + 1) % this._images.length;
-
-    this._loadImage(nextImage, this._images[this._currentIndex]);
-
-    currentImage.setSmooth("alpha", 0, { duration: 0.8 });
-    nextImage.setSmooth("alpha", 1, { duration: 0.8 });
+    img.setSmooth("alpha", 0, { duration: 0.6 });
 
     setTimeout(() => {
-      currentImage.patch({
-        texture: nextImage.texture,
-        alpha: 1,
-      });
-      nextImage.patch({
-        alpha: 0,
-      });
-    }, 800);
-  }
-
-  _detach() {
-    this._stopSlideshow();
+      this._currentIndex = (this._currentIndex + 1) % this._images.length;
+      this._setImage(this._images[this._currentIndex]);
+      img.setSmooth("alpha", 1, { duration: 0.6 });
+    }, 600);
   }
 
   pause() {
@@ -117,8 +96,10 @@ export default class Slideshow extends Lightning.Component {
   }
 
   resume() {
-    if (this._images && this._images.length > 1) {
-      this._startSlideshow();
-    }
+    this._startIfNeeded();
+  }
+
+  _detach() {
+    this._stopSlideshow();
   }
 }

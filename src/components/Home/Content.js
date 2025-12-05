@@ -6,13 +6,13 @@ import { movieService } from "../../services/movieService";
 export default class Content extends Lightning.Component {
   static _template() {
     return {
-      // rect: true,
-      // color: 0xff000000,
-      // w: 1241,
-      // h: 837,
-      //TODO dodaj flex i gap a ne y
-      MoviesRow: { x: 0, y: 0, collision: true, type: HorizontalContainer },
-      SeriesRow: { x: 0, y: 425, collision: true, type: HorizontalContainer },
+      w: 1241,
+      h: 837,
+      flex: {
+        direction: "column",
+      },
+      MoviesRow: { type: HorizontalContainer, flexItem: { marginBottom: 20 } },
+      SeriesRow: { type: HorizontalContainer, flexItem: { marginBottom: 0 } },
     };
   }
 
@@ -31,7 +31,6 @@ export default class Content extends Lightning.Component {
       railFontFace: "Ema",
       railFontSize: 24,
       railLetterSpacing: 2,
-      x: 0,
       disableScroll: true,
     };
 
@@ -43,7 +42,6 @@ export default class Content extends Lightning.Component {
       railFontFace: "InterBold",
       railFontSize: 24,
       railLetterSpacing: 2,
-      x: 0,
       disableScroll: true,
     };
   }
